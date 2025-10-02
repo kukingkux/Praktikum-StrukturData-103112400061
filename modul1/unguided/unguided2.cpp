@@ -55,6 +55,8 @@ int main()
         cout << konversiAngkaHuruf(input);
     }
 
+    cout << endl;
+
     return 0;
 }
 
