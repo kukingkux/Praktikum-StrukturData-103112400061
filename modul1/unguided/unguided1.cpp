@@ -3,8 +3,8 @@ using namespace std;
 
 int main()
 {
-    float angka1, angka2;
-    float tambah, kurang, kali, bagi; // Keishin
+    double angka1, angka2;
+    double tambah, kurang, kali, bagi; // Keishin
 
     cout << "Masukkan angka pertama: ";
     cin >> angka1;
