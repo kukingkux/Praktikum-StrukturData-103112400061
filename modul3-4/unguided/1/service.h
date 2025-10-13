@@ -2,6 +2,7 @@
 #define SERVICE_H_INCLUDED
 #include <string>
 using namespace std;
+
 struct Service{
     string nama;
     string pesanan;
@@ -10,7 +11,7 @@ struct Service{
 
 Service *createService(string nama, string pesanan);
 void insertService(string nama, string pesanan);
-void deleteService(string nama);
+void serveService();
 void showServices();
 
 #endif

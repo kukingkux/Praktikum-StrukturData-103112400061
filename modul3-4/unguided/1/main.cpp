@@ -2,7 +2,7 @@
 #include "service.h"
 using namespace std;
 
-int main()
+int main() // main program, menu kasir
 {
     int input;
     string nama, pesanan;
@@ -12,6 +12,8 @@ int main()
         cout << "1. Tambah Antrian\n";
         cout << "2. Layani Antrian\n";
         cout << "3. Tampilkan Antrian\n";
+        cout << "0. Exit\n";
+        cout << "Pilih: ";
 
         cin >> input;
         switch (input) {
@@ -23,9 +25,7 @@ int main()
                 insertService(nama, pesanan);
                 break;
             case 2:
-                cout << "Masukkan nama yang dilayani: ";
-                cin >> nama;
-                deleteService(nama);
+                serveService();
                 break;
             case 3:
                 showServices();
