@@ -149,172 +149,421 @@ Data pada array dapat kita isi ulang dengan cara seperti ini:<br>
 `huruf[2] = 'z';`<br>
 Maka isi array `huruf` pada indeks ke-2 akan bernilai z`.
 
+### 8. **Linked List**
+
+Dalam C++, linked list merupakan struktur data linear yang memungkinkan user untuk menyimpan data di lokasi memory yang tidak berurutan. Sebuah linked list didefinisikan sebagai sekumpulan nodes yang dimana tiap node memiliki 2 anggota: value node itu sendiri dan petunjuk next/previous yang menyimpan alamat node berikutnya/sebelumnya.
+
+**Representasi Linked List dalam C++**<br>
+Dalam C++, linked list pada dasarnya direpresentasikan oleh pointer ke node pertama, yang umumnya disebut sebagai "**head**" dari list tersebut. Setiam node dalam list didefinisikan oleh struktur yang mencakup data field dan pointer yang mengarah ke struktur dengan tipe yang sama. Jenis struktur ini dikenal sebagai struktur self-referential.
+
+**Singly Linked List**<br>
+Singly linked list adalah bentuk paling sederhana dari linked list, di mana setiap node mengandung 2 anggota yaitu data dan next pointer yang menyimpan alamat node berikutnya. Setiap node dalam singly linked list terhubung melalui petunjuk berikutnya, dan penunjuk beriutnya dari node terakhir mengarah ke NULL, yang menandakan akhir dari linked list. Diagram berikut menggambarkan struktur singly linked list: <br>
+![Diagram singly linked list](assets/singly-linked-list-in-c.webp)
+
 ## Guided
 
-### 1. Guided - Call by Pointer
+### 1. Guided - Separate Compilation
+
+`mahasiswa.h`
 
 ```c++
+#ifndef MAHASISWA_H_INCLUDED
+#define MAHASISWA_H_INCLUDED
+struct mahasiswa{
+    char nim[10];
+    int nilai1, nilai2;
+};
+void inputMhs(mahasiswa &m);
+float rata2(mahasiswa m);
+#endif // MAHASISWA_H_INCLUDED
+```
+
+<br>
+
+`mahasiswa.cpp`
+
+```c++
+#include "mahasiswa.h"
 #include <iostream>
 using namespace std;
 
-void tukar(int *px, int *py)
-{
-    int temp = *px;
-    *px = *py;
-    *py = temp;
+void inputMhs(mahasiswa &m){
+    cout << "input nama = ";
+    cin >> (m).nim;
+    cout << "input nilai1 = ";
+    cin >> (m).nilai1;
+    cout << "input nilai2 = ";
+    cin >> (m).nilai2;
 }
+
+float rata2(mahasiswa m){
+    return (m.nilai1 + m.nilai2) / 2;
+}
+```
+
+<br>
+
+`main.cpp`
+
+```c++
+#include <iostream>
+#include "mahasiswa.h"
+using namespace std;
 
 int main()
 {
-    int a = 10, b = 20;
-    cout << "Sebelum ditukar: a = " << a << ", b = " << b << endl;
-    tukar(&a, &b);
-    cout << "Setelah ditukar: a = " << a << ", b = " << b << endl;
+    mahasiswa mhs;
+    inputMhs(mhs);
+    cout << "rata - rata = " << rata2(mhs) << endl;
     return 0;
 }
-
 ```
+
+<br>
 
 > output<br> ![Screenshot output guided 1](output/guided1.png)
 
-Program untuk menukar `a` & `b` dengan prosedur call by pointer. Call by pointer bekerja dengan cara pass memory address dari variabel menggunakan function atau prosedur. Untuk mendapatkan value asli dari variabel, akan membutuhkan operator `*` di awal variabel contoh `*px`. Lalu untuk memanggil membutuhkan operator `&` contoh `tukar(&a, &b)`.
+Program mencari rata-rata nilai mahasiswa. Program dibangun dan dijalankan dengan Separate Compilation yang terdiri dari 3 file terpisah. Preprocessing dilakukan dalam file header `mahasiswa.h`, lalu akan diimplementasikan dalam file `mahasiswa.cpp`. Setelah itu terdapat file `main.cpp` yang merupakan program utama untuk menjalankan objek yang telah dibuat sebelumnya di `mahasiswa.cpp`. Untuk program agar dapat berjalan dengan semestinya, interface (header) harus di-import dalam file .cpp dengan `#include "mahasiswa.h`. Untuk compile dan menjalankan program dapat dilakukan perintah pada terminal sebagai berikut: `g++ .\mahasiswa.cpp .\main.cpp -o main.exe`
 
-### 2. Guided - Call by Reference
+### 2. Guided - Linked List
 
 ```c++
 #include <iostream>
 using namespace std;
 
-void tukar(int &x, int &y)
-{
-    int temp = x;
-    x = y;
-    y = temp;
+// Struktur Node
+struct Node {
+    int data;
+    Node* next;
+};
+
+// Pointer awal dan akhir
+Node* head = nullptr;
+
+// Fungsi untuk membuat node baru
+Node* createNode(int data) {
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->next = nullptr;
+    return newNode;
 }
 
-int main()
-{
-    int a = 10, b = 20;
-    cout << "Sebelum ditukar: a = " << a << ", b = " << b << endl;
-    tukar(a, b);
-    cout << "Setelah ditukar: a = " << a << ", b = " << b << endl;
+void insertDepan(int data) {
+    Node* newNode = createNode(data);
+    newNode->next = head;
+    head = newNode;
+    cout << "Data" << data << " berhasil ditambahkan di depan.\n";
+}
+
+
+void insertBelakang(int data) {
+    Node* newNode = createNode(data);
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+    cout << "Data " << data << " berhasil ditambahkan di belakang.\n";
+}
+
+void insertSetelah(int target, int dataBaru) {
+    Node* temp = head;
+    while (temp != nullptr && temp->data != target) {
+        temp = temp->next;
+    }
+
+    if (temp == nullptr) {
+        cout << "Data " << target << " tidak ditemukan!\n";
+    } else {
+        Node* newNode = createNode(dataBaru);
+        newNode->next = temp->next;
+        temp->next = newNode;
+        cout << "Data " << dataBaru << " berhasil disisipkan setelah " << target << ".\n";
+    }
+}
+
+// ========== DELETE FUNCTION ==========
+void hapusNode(int data) {
+    if (head == nullptr) {
+        cout << "List kosong!\n";
+        return;
+    }
+
+    Node* temp = head;
+    Node* prev = nullptr;
+
+    // Jika data di node pertama
+    if (temp != nullptr && temp->data == data) {
+        head = temp->next;
+        delete temp;
+        cout << "Data " << data << " berhasil dihapus.\n";
+        return;
+    }
+
+    // Cari node yang akan dihapus
+    while (temp != nullptr && temp->data != data) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    // Jika data tidak ditemukan
+    if (temp == nullptr) {
+        cout << "Data " << data << " tidak ditemukan!\n";
+        return;
+    }
+
+    prev->next = temp->next;
+    delete temp;
+    cout << "Data " << data << " berhasil dihapus.\n";
+}
+
+// ========== UPDATE FUNCTION ==========
+void updateNode(int dataLama, int dataBaru) {
+    Node* temp = head;
+    while (temp != nullptr && temp->data != dataLama) {
+        temp = temp->next;
+    }
+
+    if (temp == nullptr) {
+        cout << "Data " << dataLama << " tidak ditemukan!\n";
+    } else {
+        temp->data = dataBaru;
+        cout << "Data " << dataLama << " berhasil diupdate menjadi " << dataBaru << ".\n";
+    }
+}
+
+// ========== DISPLAY FUNCTION ==========
+void tampilkanList() {
+    if (head == nullptr) {
+        cout << "List kosong!\n";
+        return;
+    }
+
+    Node* temp = head;
+    cout << "Isi Linked List: ";
+    while (temp != nullptr) {
+        cout << temp->data << " -> ";
+        temp = temp->next;
+    }
+    cout << "NULL\n";
+}
+
+// ========== MAIN PROGRAM ==========
+int main() {
+    int pilihan, data, target, dataBaru;
+
+    do {
+        cout << "\n=== MENU SINGLE LINKED LIST ===\n";
+        cout << "1. Insert Depan\n";
+        cout << "2. Insert Belakang\n";
+        cout << "3. Insert Setelah\n";
+        cout << "4. Hapus Data\n";
+        cout << "5. Update Data\n";
+        cout << "6. Tampilkan List\n";
+        cout << "0. Keluar\n";
+        cout << "Pilih: ";
+        cin >> pilihan;
+
+        switch (pilihan) {
+            case 1:
+                cout << "Masukkan data: ";
+                cin >> data;
+                insertDepan(data);
+                break;
+            case 2:
+                cout << "Masukkan data: ";
+                cin >> data;
+                insertBelakang(data);
+                break;
+            case 3:
+                cout << "Masukkan data target: ";
+                cin >> target;
+                cout << "Masukkan data baru: ";
+                cin >> dataBaru;
+                insertSetelah(target, dataBaru);
+                break;
+            case 4:
+                cout << "Masukkan data yang ingin dihapus: ";
+                cin >> data;
+                hapusNode(data);
+                break;
+            case 5:
+                cout << "Masukkan data lama: ";
+                cin >> data;
+                cout << "Masukkan data baru: ";
+                cin >> dataBaru;
+                updateNode(data, dataBaru);
+                break;
+            case 6:
+                tampilkanList();
+                break;
+            case 0:
+                cout << "Program selesai.\n";
+                break;
+            default:
+                cout << "Pilihan tidak valid!\n";
+        }
+    } while (pilihan != 0);
+
     return 0;
 }
-
 ```
 
 > output<br> ![Screenshot output guided 2](output/guided2.png)
 
-Program untuk menukar `a` & `b` dengan prosedur call by reference. Call by reference bekerja dengan cara pass variabel secara langsung tanpa menggunakan memory address. Untuk pemanggilan tidak perlu operator tambahan.
+Program penerapan linked list pada bahasa c++. Di dalamnya terdapat beberapa fungsi untuk insert data, update data, hapus data dan tampilkan data.
 
 ## Unguided
 
-### 1. Unguided - Operasi Dasar Aritmatika
+### 1. Unguided - Program Kasir dengan Linked List
 
-Buatlah sebuah program untuk melakukan transpose pada sebuah matriks persegi berukuran 3x3. Operasi transpose adalah mengubah baris menjadi kolom dan sebaliknya. Inisialisasi matriks awal di dalam kode, kemudian buat logika untuk melakukan transpose dan simpan hasilnya ke dalam matriks baru. Terakhir, tampilkan matriks awal dan matriks hasil transpose.
+Buatlah single linked list untuk Antrian yang menyimpan data pembeli( nama dan pesanan). program memiliki beberapa menu seperti tambah antrian, layani antrian(hapus), dan tampilkan antrian. \*antrian pertama harus yang pertama dilayani.
 
-Contoh Output:
+`service.h`
 
-Matriks Awal:<br>
-1 2 3<br>
-4 5 6<br>
-7 8 9
+```c++
+#ifndef SERVICE_H_INCLUDED
+#define SERVICE_H_INCLUDED
+#include <string>
+using namespace std;
 
-Matriks Hasil Transpose:<br>
-1 4 7<br>
-2 5 8<br>
-3 6 9
+struct Service{
+    string nama;
+    string pesanan;
+    Service *next;
+};
+
+Service *createService(string nama, string pesanan);
+void insertService(string nama, string pesanan);
+void serveService();
+void showServices();
+
+#endif
+```
+
+<br>
+
+`unguided1.cpp`
 
 ```c++
 #include <iostream>
+#include "service.h"
 using namespace std;
 
-void printMatriks(int matriks[3][3]) // biar ora kepanjangan
-{
-    for (int i = 0; i < 3; ++i)
-    {
-        for (int j = 0; j < 3; ++j)
-        {
-            cout << matriks[i][j] << " ";
+Service* head = nullptr; // pointer awal linked list
+
+Service *createService(string nama, string pesanan) { // membuat node baru
+    Service* newService = new Service();
+    newService->nama = nama;
+    newService->pesanan = pesanan;
+    newService->next = nullptr;
+    return newService;
+}
+
+void insertService(string nama, string pesanan) { // tambah antrian baru di belakang list (tail)
+    Service* newService = createService(nama, pesanan);
+    if (head == nullptr) {
+        head = newService;
+    } else {
+        Service* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
         }
-        cout << endl;
+        temp->next = newService;
+    }
+    cout << "Antrian dengan nama " << nama << " berhasil ditambahkan.\n";
+}
+
+void serveService() { // layani antrian pertama dengan delete head
+    if (head == nullptr) {
+        cout << "List kosong!\n";
+        return;
+    }
+
+    Service* temp = head;
+    Service* prev = nullptr;
+// 103112400061
+    if (temp != nullptr) {
+        head = temp->next;
+        cout << "Antrian dengan nama " << temp->nama << " telah dilayani.\n";
+        delete temp;
+        return;
     }
 }
 
-int main()
-{
-    int matriks[3][3] = {
-        {1, 2, 3},
-        {4, 5, 6},
-        {7, 8, 9}
-    };
-
-    int matriksKeishin[3][3]; // matriks baru gng
-
-    for (int i = 0; i < 3; ++i)
-    {
-        for (int j = 0; j < 3; ++j)
-        {
-            matriksKeishin[i][j] = matriks[j][i]; // masukin value ke matriks baru pamke logika transpose
-        }
+void showServices() { // menampilkan semua antrian
+    if (head == nullptr) {
+        cout << "Antrian kosong.\n";
+        return;
     }
+    int i = 1;
 
-    cout << "Matriks Awal:" << endl;
-    printMatriks(matriks);
+    Service* temp = head;
+    cout << "Daftar Antrian:\n";
+    while (temp != nullptr) { // Keishin
+        cout << i << ". " << temp->nama << endl;
+        cout << "   Pesanan: " << temp->pesanan << endl;
+        cout << "-------------------------------\n";
+        temp = temp->next;
+        i++;
+    }
+}
+```
 
-    cout << "Matriks Hasil Transpose:" << endl;
-    printMatriks(matriksKeishin);
+<br>
+
+`main.cpp`
+
+```c++
+#include <iostream>
+#include "service.h"
+using namespace std;
+
+int main() // main program, menu kasir
+{
+    int input;
+    string nama, pesanan;
+
+    do {
+        cout << "\n=== KASIR CAFE MPRUYY ===\n";
+        cout << "1. Tambah Antrian\n";
+        cout << "2. Layani Antrian\n";
+        cout << "3. Tampilkan Antrian\n";
+        cout << "0. Exit\n";
+        cout << "Pilih: ";
+
+        cin >> input;
+        switch (input) {
+            case 1:
+                cout << "Masukkan nama: ";
+                cin >> nama;
+                cout << "Masukkan pesanan: ";
+                cin >> pesanan;
+                insertService(nama, pesanan);
+                break;
+            case 2:
+                serveService();
+                break;
+            case 3:
+                showServices();
+                break;
+            case 0:
+                cout << "Exiting program. . .\n";
+                break;
+            default:
+                cout << "Pilihan invalid.";
+        }
+    } while (input != 0);
 
     return 0;
 }
 ```
 
-> output<br> ![Screenshot output unguided 1](output/unguided1.png)
-
-Program transpose matrix ini membutuhkan 2 matriks yaitu **matriks awal** dan **matriks akhir** untuk menyimpan nilai transpose. Pada code program dapat dilihat terdapat suatu prosedur bernama `printMatriks()` yang berguna untuk cetak output, dibuat sebagai prosedur agar code terlihat lebih rapih.
-
-Pada program, langkah awal yang dilakukan tentunya mendefinisikan matriksnya terlebih dahulu. Untuk **matriks awal** ini berukuran 3x3 yang dinamakan `matriks` diikuti dengan mengisi matriks, lalu dilanjutkan dengan mendefinisikan **matriks akhir** 3x3 yang dinamakan `matriksKeishin`.
-
-Langkah selanjutnya yaitu merancang logika untuk menyimpan value sekaligus transpose matrix. Terdapat **loop** ( `i` ) dan **nested loop** ( `j` ), dengan `i` untuk kolom dan `j` untuk baris. Dalam **nested loop**, kita akan simpan dan transpose dengan cara memasukkan value dari variabel `matriks[j][i]` ke dalam `matriksKeishin[i][j]` yang jika ditulis dalam code **C++** adalah `matriksKeishin[i][j] = matriks[j][i]`.
-
-Bagaimana proses transpose terjadi:<br>
-Umumnya jika kita ingin menyimpan value dari matriks `a` ke matriks `b` tanpa transpose, maka akan ditulis dengan cara `a[i][j] = b[i][j]` dengan `i` sebagai kolom dan `j` sebagai baris. Jika ingin melakukan transpose, kita tinggal menukar `i` dan `j` saja. Yang sebelumnya `i` sebagai kolom dan `j` sebagai baris, kini `j` sebagai kolom dan `i` sebagai baris. Dengan begitu didapatkan `a[j][i] = b[i][j]`.
-
-### 2. Unguided - Konversi Input Angka
-
-Buatlah program yang menunjukkan penggunaan call by reference. Buat sebuah prosedur bernama kuadratkan yang menerima satu parameter integer secara referensi (&). Prosedur ini akan mengubah nilai asli variabel yang dilewatkan dengan nilai kuadratnya. Tampilkan nilai variabel di main() sebelum dan sesudah memanggil prosedur untuk membuktikan perubahannya.
-
-Contoh Output:
-
-Nilai awal: 5<br>
-Nilai setelah dikuadratkan: 25
-
-```c++
-#include <iostream>
-using namespace std;
-
-void kuadratkan(int &keishin)
-{
-    keishin = keishin * keishin;
-}
-
-int main()
-{
-    int keishin;
-
-    cout << "Nilai awal: ";
-    cin >> keishin;
-
-    kuadratkan(keishin);
-    cout << "Nilai setelah dikuadratkan: " << keishin << endl;
-
-    return 0;
-}
-```
-
-> output<br> ![Screenshot output unguided 2](output/unguided2.png)
-
-Program kuadrat dengan prosedur call by reference. Call by reference bekerja dengan cara setelah prosedur `kuadratkan(keishin);` pada **main** dipanggil maka value dari `keishin` akan langsung berubah sesuai apa yang terjadi di prosedur (dalam kasus ini dikuadratkan). Maka contoh jika value awal `keishin` adalah 5, setelah prosedur dan dikuadratkan maka value original dari `keishin` akan berubah menjadi 25.
+> output<br>![Screenshot output unguided 1](output/unguided1_show.png)![Screenshot output unguided 1](output/unguided1_layani.png)![Screenshot output unguided 1](output/unguided1_add.png)
 
 ## Referensi
 
@@ -323,3 +572,4 @@ Program kuadrat dengan prosedur call by reference. Call by reference bekerja den
 3. _Duniailkom_. https://www.duniailkom.com/tutorial-belajar-c-plus-plus-jenis-jenis-operator-aritmatika-bahasa-c-plus-plus/. Diakses pada 03 Oktober 2025.
 4. _kodingakademi_. https://www.kodingakademi.id/function-c-panduan-lengkap/. Diakses pada 03 Oktober 2025.
 5. _petanikode_ . https://www.petanikode.com/cpp-array/. Diakses pada 06 Oktober 2025.
+6. _GeekForGeeks_. https://www.geeksforgeeks.org/cpp/cpp-linked-list/. Diakses pada 13 Oktober 2025.
