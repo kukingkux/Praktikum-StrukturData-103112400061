@@ -563,6 +563,20 @@ int main() // main program, menu kasir
 }
 ```
 
+Program untuk mengelola antrian sederhana dengan separate compilation. Terdapat 3 file untuk menjalankan program ini, diantaranya:<br>
+
+1. **service.h** (Header / Interface)<br>
+   File ini berisi dengan deklarasi struct dan function. Struct ini untuk data antrian yang memiliki `nama`, `pesanan` dan pointer `next`. Kemudian terdapat deklarasi function untuk memberitahu compiler pada saat program berjalan.
+2. **unguided1.cpp** (Logic) <br>
+   Semua function yang telah dideklarasikan di `service.h` memiliki logic di sini. Terdapat function utama yaitu,
+   - `insertService()`: Memasukkan data antrian baru pada **tail** dari linked list.
+   - `serveService()`: Melayani antrian dimulai dari **head**.
+   - `showService()`: Menampilkan list antrian.
+3. **main.cpp** (File Utama)
+   File ini hanya memanggil semua function yang telah dideklarasikan sebelumnya dari `service.h`.
+
+Cara menjalankan program ini dengan mengetikkan pada terminal: `g++ .\unguided1.cpp .\main.cpp -o main.exe`, kemudian execute `main.exe`.
+
 > output<br>![Screenshot output unguided 1](output/unguided1_show.png)![Screenshot output unguided 1](output/unguided1_layani.png)![Screenshot output unguided 1](output/unguided1_add.png)
 
 ## Referensi

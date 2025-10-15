@@ -2,7 +2,7 @@
 #include "service.h"
 using namespace std;
 
-int main() // main program, menu kasir
+int main() // main function
 {
     int input;
     string nama, pesanan;
@@ -22,7 +22,7 @@ int main() // main program, menu kasir
                 cin >> nama;
                 cout << "Masukkan pesanan: ";
                 cin >> pesanan;
-                insertService(nama, pesanan);
+                insertService(nama, pesanan); 
                 break;
             case 2:
                 serveService();
