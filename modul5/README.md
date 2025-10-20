@@ -160,275 +160,14 @@ Dalam C++, linked list pada dasarnya direpresentasikan oleh pointer ke node pert
 Singly linked list adalah bentuk paling sederhana dari linked list, di mana setiap node mengandung 2 anggota yaitu data dan next pointer yang menyimpan alamat node berikutnya. Setiap node dalam singly linked list terhubung melalui petunjuk berikutnya, dan penunjuk beriutnya dari node terakhir mengarah ke NULL, yang menandakan akhir dari linked list. Diagram berikut menggambarkan struktur singly linked list: <br>
 ![Diagram singly linked list](assets/singly-linked-list-in-c.webp)
 
-## Guided
-
-### 1. Guided - Separate Compilation
-
-`mahasiswa.h`
-
-```c++
-#ifndef MAHASISWA_H_INCLUDED
-#define MAHASISWA_H_INCLUDED
-struct mahasiswa{
-    char nim[10];
-    int nilai1, nilai2;
-};
-void inputMhs(mahasiswa &m);
-float rata2(mahasiswa m);
-#endif // MAHASISWA_H_INCLUDED
-```
-
-<br>
-
-`mahasiswa.cpp`
-
-```c++
-#include "mahasiswa.h"
-#include <iostream>
-using namespace std;
-
-void inputMhs(mahasiswa &m){
-    cout << "input nama = ";
-    cin >> (m).nim;
-    cout << "input nilai1 = ";
-    cin >> (m).nilai1;
-    cout << "input nilai2 = ";
-    cin >> (m).nilai2;
-}
-
-float rata2(mahasiswa m){
-    return (m.nilai1 + m.nilai2) / 2;
-}
-```
-
-<br>
-
-`main.cpp`
-
-```c++
-#include <iostream>
-#include "mahasiswa.h"
-using namespace std;
-
-int main()
-{
-    mahasiswa mhs;
-    inputMhs(mhs);
-    cout << "rata - rata = " << rata2(mhs) << endl;
-    return 0;
-}
-```
-
-<br>
-
-> output<br> ![Screenshot output guided 1](output/guided1.png)
-
-Program mencari rata-rata nilai mahasiswa. Program dibangun dan dijalankan dengan Separate Compilation yang terdiri dari 3 file terpisah. Preprocessing dilakukan dalam file header `mahasiswa.h`, lalu akan diimplementasikan dalam file `mahasiswa.cpp`. Setelah itu terdapat file `main.cpp` yang merupakan program utama untuk menjalankan objek yang telah dibuat sebelumnya di `mahasiswa.cpp`. Untuk program agar dapat berjalan dengan semestinya, interface (header) harus di-import dalam file .cpp dengan `#include "mahasiswa.h`. Untuk compile dan menjalankan program dapat dilakukan perintah pada terminal sebagai berikut: `g++ .\mahasiswa.cpp .\main.cpp -o main.exe`
-
-### 2. Guided - Linked List
-
-```c++
-#include <iostream>
-using namespace std;
-
-// Struktur Node
-struct Node {
-    int data;
-    Node* next;
-};
-
-// Pointer awal dan akhir
-Node* head = nullptr;
-
-// Fungsi untuk membuat node baru
-Node* createNode(int data) {
-    Node* newNode = new Node();
-    newNode->data = data;
-    newNode->next = nullptr;
-    return newNode;
-}
-
-void insertDepan(int data) {
-    Node* newNode = createNode(data);
-    newNode->next = head;
-    head = newNode;
-    cout << "Data" << data << " berhasil ditambahkan di depan.\n";
-}
-
-
-void insertBelakang(int data) {
-    Node* newNode = createNode(data);
-    if (head == nullptr) {
-        head = newNode;
-    } else {
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
-    cout << "Data " << data << " berhasil ditambahkan di belakang.\n";
-}
-
-void insertSetelah(int target, int dataBaru) {
-    Node* temp = head;
-    while (temp != nullptr && temp->data != target) {
-        temp = temp->next;
-    }
-
-    if (temp == nullptr) {
-        cout << "Data " << target << " tidak ditemukan!\n";
-    } else {
-        Node* newNode = createNode(dataBaru);
-        newNode->next = temp->next;
-        temp->next = newNode;
-        cout << "Data " << dataBaru << " berhasil disisipkan setelah " << target << ".\n";
-    }
-}
-
-// ========== DELETE FUNCTION ==========
-void hapusNode(int data) {
-    if (head == nullptr) {
-        cout << "List kosong!\n";
-        return;
-    }
-
-    Node* temp = head;
-    Node* prev = nullptr;
-
-    // Jika data di node pertama
-    if (temp != nullptr && temp->data == data) {
-        head = temp->next;
-        delete temp;
-        cout << "Data " << data << " berhasil dihapus.\n";
-        return;
-    }
-
-    // Cari node yang akan dihapus
-    while (temp != nullptr && temp->data != data) {
-        prev = temp;
-        temp = temp->next;
-    }
-
-    // Jika data tidak ditemukan
-    if (temp == nullptr) {
-        cout << "Data " << data << " tidak ditemukan!\n";
-        return;
-    }
-
-    prev->next = temp->next;
-    delete temp;
-    cout << "Data " << data << " berhasil dihapus.\n";
-}
-
-// ========== UPDATE FUNCTION ==========
-void updateNode(int dataLama, int dataBaru) {
-    Node* temp = head;
-    while (temp != nullptr && temp->data != dataLama) {
-        temp = temp->next;
-    }
-
-    if (temp == nullptr) {
-        cout << "Data " << dataLama << " tidak ditemukan!\n";
-    } else {
-        temp->data = dataBaru;
-        cout << "Data " << dataLama << " berhasil diupdate menjadi " << dataBaru << ".\n";
-    }
-}
-
-// ========== DISPLAY FUNCTION ==========
-void tampilkanList() {
-    if (head == nullptr) {
-        cout << "List kosong!\n";
-        return;
-    }
-
-    Node* temp = head;
-    cout << "Isi Linked List: ";
-    while (temp != nullptr) {
-        cout << temp->data << " -> ";
-        temp = temp->next;
-    }
-    cout << "NULL\n";
-}
-
-// ========== MAIN PROGRAM ==========
-int main() {
-    int pilihan, data, target, dataBaru;
-
-    do {
-        cout << "\n=== MENU SINGLE LINKED LIST ===\n";
-        cout << "1. Insert Depan\n";
-        cout << "2. Insert Belakang\n";
-        cout << "3. Insert Setelah\n";
-        cout << "4. Hapus Data\n";
-        cout << "5. Update Data\n";
-        cout << "6. Tampilkan List\n";
-        cout << "0. Keluar\n";
-        cout << "Pilih: ";
-        cin >> pilihan;
-
-        switch (pilihan) {
-            case 1:
-                cout << "Masukkan data: ";
-                cin >> data;
-                insertDepan(data);
-                break;
-            case 2:
-                cout << "Masukkan data: ";
-                cin >> data;
-                insertBelakang(data);
-                break;
-            case 3:
-                cout << "Masukkan data target: ";
-                cin >> target;
-                cout << "Masukkan data baru: ";
-                cin >> dataBaru;
-                insertSetelah(target, dataBaru);
-                break;
-            case 4:
-                cout << "Masukkan data yang ingin dihapus: ";
-                cin >> data;
-                hapusNode(data);
-                break;
-            case 5:
-                cout << "Masukkan data lama: ";
-                cin >> data;
-                cout << "Masukkan data baru: ";
-                cin >> dataBaru;
-                updateNode(data, dataBaru);
-                break;
-            case 6:
-                tampilkanList();
-                break;
-            case 0:
-                cout << "Program selesai.\n";
-                break;
-            default:
-                cout << "Pilihan tidak valid!\n";
-        }
-    } while (pilihan != 0);
-
-    return 0;
-}
-```
-
-> output<br> ![Screenshot output guided 2](output/guided2.png)
-
-Program penerapan linked list pada bahasa c++. Di dalamnya terdapat beberapa fungsi untuk insert data, update data, hapus data dan tampilkan data.
-
 ## Unguided
 
-### 1. Unguided - Program Kasir dengan Linked List
+### 1. Unguided - Search Nama Customer
 
-Buatlah single linked list untuk Antrian yang menyimpan data pembeli( nama dan pesanan). program memiliki beberapa menu seperti tambah antrian, layani antrian(hapus), dan tampilkan antrian. \*antrian pertama harus yang pertama dilayani.
-
-`service.h`
+Buatlah searcing untuk mencari nama pembeli pada unguided sebelumnya.
 
 ```c++
-#ifndef SERVICE_H_INCLUDED
-#define SERVICE_H_INCLUDED
-#include <string>
+#include <iostream>
 using namespace std;
 
 struct Service{
@@ -437,93 +176,48 @@ struct Service{
     Service *next;
 };
 
-Service *createService(string nama, string pesanan);
-void insertService(string nama, string pesanan);
-void serveService();
-void showServices();
-
-#endif
-```
-
-<br>
-
-`unguided1.cpp`
-
-```c++
-#include <iostream>
-#include "service.h"
-using namespace std;
-
 Service* head = nullptr; // pointer awal linked list
 
 Service *createService(string nama, string pesanan) { // membuat node baru
-    Service* newService = new Service();
-    newService->nama = nama;
-    newService->pesanan = pesanan;
-    newService->next = nullptr;
-    return newService;
+    ...
 }
 
 void insertService(string nama, string pesanan) { // tambah antrian baru di belakang list (tail)
-    Service* newService = createService(nama, pesanan);
-    if (head == nullptr) {
-        head = newService;
-    } else {
-        Service* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newService;
-    }
-    cout << "Antrian dengan nama " << nama << " berhasil ditambahkan.\n";
+    ...
 }
 
 void serveService() { // layani antrian pertama dengan delete head
-    if (head == nullptr) {
-        cout << "List kosong!\n";
-        return;
-    }
-
-    Service* temp = head;
-    Service* prev = nullptr;
-// 103112400061
-    if (temp != nullptr) {
-        head = temp->next;
-        cout << "Antrian dengan nama " << temp->nama << " telah dilayani.\n";
-        delete temp;
-        return;
-    }
+    ...
 }
 
 void showServices() { // menampilkan semua antrian
+    ...
+}
+
+void findCustomer(const string &C) {
     if (head == nullptr) {
         cout << "Antrian kosong.\n";
         return;
     }
-    int i = 1;
 
     Service* temp = head;
-    cout << "Daftar Antrian:\n";
-    while (temp != nullptr) { // Keishin
-        cout << i << ". " << temp->nama << endl;
-        cout << "   Pesanan: " << temp->pesanan << endl;
-        cout << "-------------------------------\n";
+    int i = 1;
+
+    while (temp != nullptr) {
+        if (temp->nama == C) {
+            cout << "\nCustomer ditemukan pada antrian ke-" << i << endl;
+            cout << "Nama: " << temp->nama << endl;
+            cout << "Pesanan: " << temp->pesanan << endl;
+            return;
+        }
         temp = temp->next;
         i++;
     }
+
+    cout << "Customer dengan nama \"" << C << "\" tidak ditemukan.\n";
 }
-```
 
-<br>
-
-`main.cpp`
-
-```c++
-#include <iostream>
-#include "service.h"
-using namespace std;
-
-int main() // main program, menu kasir
+int main() // main function
 {
     int input;
     string nama, pesanan;
@@ -533,6 +227,7 @@ int main() // main program, menu kasir
         cout << "1. Tambah Antrian\n";
         cout << "2. Layani Antrian\n";
         cout << "3. Tampilkan Antrian\n";
+        cout << "4. Cari Customer\n";
         cout << "0. Exit\n";
         cout << "Pilih: ";
 
@@ -551,6 +246,11 @@ int main() // main program, menu kasir
             case 3:
                 showServices();
                 break;
+            case 4:
+                cout << "Masukkan nama: ";
+                cin >> nama;
+                findCustomer(nama);
+                break;
             case 0:
                 cout << "Exiting program. . .\n";
                 break;
@@ -563,128 +263,202 @@ int main() // main program, menu kasir
 }
 ```
 
-> output<br>![Screenshot output unguided 1](output/unguided1_show.png)![Screenshot output unguided 1](output/unguided1_layani.png)![Screenshot output unguided 1](output/unguided1_add.png)
+> output<br>![Screenshot output unguided 1](output/unguided1_list.png)![Screenshot output unguided 1](output/unguided1_find.png) > <br> > ![Screenshot output unguided 1](output/unguided1_notfound.png)
 
-Program untuk mengelola antrian sederhana dengan separate compilation. Terdapat 3 file untuk menjalankan program ini, diantaranya:<br>
-
-1. **service.h** (Header / Interface)<br>
-   File ini berisi dengan deklarasi struct dan function. Struct ini untuk data antrian yang memiliki `nama`, `pesanan` dan pointer `next`. Kemudian terdapat deklarasi function untuk memberitahu compiler pada saat program berjalan.
-2. **unguided1.cpp** (Logic) <br>
-   Semua function yang telah dideklarasikan di `service.h` memiliki logic di sini. Terdapat function utama yaitu,
-   - `insertService()`: Memasukkan data antrian baru pada **tail** dari linked list.
-   - `serveService()`: Melayani antrian dimulai dari **head**.
-   - `showService()`: Menampilkan list antrian.
-3. **main.cpp** (File Utama)
-   File ini hanya memanggil semua function yang telah dideklarasikan sebelumnya dari `service.h`.
-
-Cara menjalankan program ini dengan mengetikkan pada terminal: `g++ .\unguided1.cpp .\main.cpp -o main.exe`, kemudian execute `main.exe`.
+Program untuk mencari customer dalam antrian. Pencarian dilakukan dalam fungsi `findCustomer(const string &C)` memiliki parameter `C` dengan `const` untuk menjaga value original agar tidak berubah, dan metode pass-by-reference. Algoritma search dilakukan secara sequential (sequential search) dengan while loop yang akan berhenti (break) jika hasil ditemukan.
 
 ### 2. Unguided 2 - Reverse Singly Linked List
 
-Buatlah program kode untuk membalik (reverse) singly linked list (1-2-3 menjadi 3-2-1).
+Gunakan latihan pada pertemuan minggun ini dan tambahkan seardhing untuk mencari buku berdasarkan judul, penulis, dan ISBN.
 
 ```c++
 #include <iostream>
+#include <string>
 using namespace std;
 
 struct Node {
-    int data;
+    int isbn;
+    string judul;
+    string penulis;
     Node* next;
 };
 
-Node* head = nullptr; // pointer awal linked list
+Node* head = nullptr;
 
-Node *createNode(int data) { // membuat node baru
-    Node* newNode = new Node();
-    newNode->data = data;
-    newNode->next = nullptr;
-    return newNode;
+Node *createNode(int isbn, string judul, string penulis) {
+    ...
 }
 
-void insertNode() { // tambah data baru di belakang list (tail)
-
-    for (int i = 1; i <= 3; i++) {
-        Node* newNode = createNode(i);
-        if (head == nullptr) {
-            head = newNode;
-        } else {
-            Node* temp = head;
-            while (temp->next != nullptr) {
-                temp = temp->next;
-            }
-            temp->next = newNode;
-        }
-    }
-
-    cout << "List telah diisi.\n";
+void insertBuku(int isbn, string judul, string penulis) {
+    ...
 }
 
-void reverseNode() { // reverse list
+void updateBuku(int isbn) {
+    ...
+}
+
+void tampilkanList() {
+    ...
+}
+
+void findByISBN(int isbn) {
     if (head == nullptr) {
-        cout << "List kosong!\n";
+        cout << "Tidak ada buku.\n";
         return;
     }
 
-    Node* prev = nullptr;
     Node* temp = head;
-    Node* next = nullptr;
-// 103112400061
+    int i = 1;
+
     while (temp != nullptr) {
-        // store next node
-        next = temp->next;
-        // reverse pointer dari next menjadi prev
-        temp->next = prev;
-        // pindah prev ke temp; temp ke next untuk membalikkan data
-        prev = temp;
-        temp = next;
+        if (temp->isbn == isbn) {
+            cout << "\nBuku ditemukan pada urutan ke-" << i << endl;
+            cout << "Judul: " << temp->judul << endl;
+            cout << "Penulis: " << temp->penulis << endl;
+            cout << "ISBN: " << temp->isbn << endl;
+            return;
+        }
+        temp = temp->next;
+        i++;
     }
 
-    // update head setelah loop selesai
-    head = prev;
-    cout << "List telah di-reverse.\n";
+    cout << "Buku dengan ISBN \"" << isbn << "\" tidak ditemukan.\n";
 }
 
-void showNodes() { // menampilkan list
+void findByJudul(const string &judul) {
     if (head == nullptr) {
-        cout << "List kosong.\n";
+        cout << "Tidak ada buku.\n";
         return;
     }
 
     Node* temp = head;
-    cout << "Isi List:\n";
-    while (temp != nullptr) { // Keishin
-        cout << temp->data << " -> ";
+    int i = 1;
+
+    while (temp != nullptr) {
+        if (temp->judul == judul) {
+            cout << "\nBuku ditemukan pada urutan ke-" << i << endl;
+            cout << "Judul: " << temp->judul << endl;
+            cout << "Penulis: " << temp->penulis << endl;
+            cout << "ISBN: " << temp->isbn << endl;
+            return;
+        }
         temp = temp->next;
+        i++;
     }
-    cout << "NULL\n";
+
+    cout << "Buku dengan judul \"" << judul << "\" tidak ditemukan.\n";
+}
+void findByPenulis(const string& penulis) {
+    if (head == nullptr) {
+        cout << "Tidak ada buku.\n";
+        return;
+    }
+
+    Node* temp = head;
+    int i = 1;
+
+    while (temp != nullptr) {
+        if (temp->penulis == penulis) {
+            cout << "\nBuku ditemukan pada urutan ke-" << i << endl;
+            cout << "Judul: " << temp->judul << endl;
+            cout << "Penulis: " << temp->penulis << endl;
+            cout << "ISBN: " << temp->isbn << endl;
+            cout << "-------------------------------\n";
+        }
+        temp = temp->next;
+        i++;
+    }
+
+    cout << "Buku dengan penulis \"" << penulis << "\" tidak ditemukan.\n";
 }
 
-int main() // main function
+int main()
 {
-        cout << "\n=== Unguided 2 ===\n";
-        cout << "1. Tambah Data (isi list)\n";
-        insertNode();
-        cout << "2. Tampilkan List\n";
-        showNodes();
-        cout << endl;
-        cout << "3. Reverse List\n";
-        reverseNode();
-        cout << "4. Tampilkan List\n";
-        showNodes();
+    int input;
+    int isbn;
+    string judul, penulis;
 
+    do {
+        cout << "\n=== Perpustakaan Mpruyy ===\n";
+        cout << "1. Tambah Buku\n";
+        cout << "2. Hapus Buku\n";
+        cout << "3. Update Buku\n";
+        cout << "4. List Buku\n";
+        cout << "5. Cari Buku\n";
+        cout << "0. Exit\n";
+        cout << "Pilih: ";
+
+        cin >> input;
+        switch (input) {
+            case 1:
+                cout << "Masukkan ISBN: ";
+                cin >> isbn;
+                cout << "Masukkan judul: ";
+                cin >> judul;
+                cout << "Masukkan penulis: ";
+                cin >> penulis;
+                insertBuku(isbn, judul, penulis);
+                break;
+            case 2:
+                deleteBuku(isbn);
+                break;
+            case 3:
+                updateBuku(isbn);
+                break;
+            case 4:
+                tampilkanList();
+                break;
+            case 5:
+                int berdasarkan;
+                cout << "Cari berdasarkan:\n";
+                cout << "1. ISBN\n";
+                cout << "2. Judul\n";
+                cout << "3. Penulis\n";
+                cout << "Pilih: ";
+                cin >> berdasarkan;
+
+                switch (berdasarkan) {
+                    case 1:
+                        cout << "Masukkan ISBN: ";
+                        cin >> isbn;
+                        findByISBN(isbn);
+                        break;
+                    case 2:
+                        cout << "Masukkan Judul: ";
+                        cin >> judul;
+                        findByJudul(judul);
+                        break;
+                    case 3:
+                        cout << "Masukkan Penulis: ";
+                        cin >> penulis;
+                        findByPenulis(penulis);
+                        break;
+                    default:
+                        cout << "Pilihan invalid.";
+                }
+                break;
+            case 0:
+                cout << "Exiting program. . .\n";
+                break;
+            default:
+                cout << "Pilihan invalid.";
+        }
+    } while (input != 0);
 
     return 0;
 }
 ```
 
-> output<br>![Screenshot output unguided 2](output/unguided2.png)
+> output<br>![Screenshot output unguided 2](output/unguided2_list.png)![Screenshot output unguided 2](output/unguided2_penulis.png)![Screenshot output unguided 2](output/unguided2_isbn.png)![Screenshot output unguided 2](output/unguided2_judul.png)
 
-Program untuk reverse singly linked list. List akan diisi oleh function `insertNodes()` untuk mengisi data 1, 2 dan 3 dengan for loop. Lalu untuk reverse terdapat function `reverseNodes()` dengan cara kerjanya adalah:
+Program untuk mencari buku. Terdapat 3 function berbeda untuk setiap pencarian yang berdasarkan pada ISBN, Judul dan Penulis. Seluruh function search menggunakan algoritma sequential.
 
-1. Store `next` node.
-2. Reverse pointer `next` menjadi `prev`.
-3. Pindah `prev` ke `temp`; `temp` ke `next` untuk membalikkan data.
-4. Update head menjadi `prev` setelah loop selesai.
+1. `findByISBN(int isbn)`<br>
+   Mencari buku dengan ISBN sesuai input dengan while loop dan berhenti jika ketemu.
+2. `findByJudul(const string &judul)`<br>
+   Mencari buku dengan Judul sesuai input dengan while loop dan berhenti jika ketemu. Parameter menggunakan const dan pass-by-reference untuk menjaga original value agar tidak berubah.
+3. `findByPenulis(const string &penulis)`<br>
+   Mencari buku dengan Penulis sesuai input dengan while loop dan menampilkan seluruh buku yang ketemu. Parameter menggunakan const dan pass-by-reference untuk menjaga original value agar tidak berubah.
 
 ## Referensi
 
