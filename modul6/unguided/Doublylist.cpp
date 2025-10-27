@@ -53,3 +53,17 @@ void insertLast(List &L, address P) {
         L.Last = P;
     }
 }
+
+void findElm(List L, infotype x) {
+    address P = L.First;
+    while (P != nullptr && x.nopol != P->info.nopol) {
+        P = P->next;
+    }
+    if (P != nullptr) {
+        cout << "Nomor Polisi   : " << P->info.nopol << endl;
+        cout << "Warna          : " << P->info.warna << endl;
+        cout << "Tahun          : " << P->info.thnBuat << endl;
+    } else {
+        cout << "Kendaraan dengan nomor polisi " << x.nopol << " tidak ditemukan.\n";
+    }
+}

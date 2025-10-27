@@ -12,7 +12,8 @@ int main() {
     do {
         cout << "\n===== MENU DATA KENDARAAN KEPOLISIAN NASI HUY =====\n";
         cout << "1. Insert Belakang\n";
-        cout << "2. Tampilkan Data\n";
+        cout << "2. Cari Kendaraan\n";
+        cout << "3. Tampilkan Data\n";
         cout << "0. Keluar\n";
         cout << "===================================\n";
         cout << "Pilih menu: ";
@@ -35,6 +36,11 @@ int main() {
                 };
                 break;
             case 2:
+                cout << "Masukkan nomor polisi yang dicari: ";
+                cin >> kendaraan.nopol;
+                findElm(L, kendaraan);
+                break;
+            case 3:
                 printInfo(L);
                 break;
             case 0:

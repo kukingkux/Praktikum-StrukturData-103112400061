@@ -29,5 +29,6 @@ address alokasi(const infotype &x);
 void dealokasi(address &P);
 void printInfo(const List &L);
 void insertLast(List &L, address P);
+void findElm(List L, infotype x);
 
 #endif
