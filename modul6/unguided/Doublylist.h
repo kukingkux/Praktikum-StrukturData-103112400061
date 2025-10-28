@@ -30,5 +30,9 @@ void dealokasi(address &P);
 void printInfo(const List &L);
 void insertLast(List &L, address P);
 void findElm(List L, infotype x);
+void deleteFirst(List &L, address &P);
+void deleteLast(List &L, address &P);
+void deleteAfter(List &L, address &P, address Prec);
+void deleteElm(List &L, address &P, infotype x);
 
 #endif

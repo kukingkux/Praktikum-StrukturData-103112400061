@@ -67,3 +67,75 @@ void findElm(List L, infotype x) {
         cout << "Kendaraan dengan nomor polisi " << x.nopol << " tidak ditemukan.\n";
     }
 }
+
+void deleteFirst(List &L, address &P) {
+    if (L.First == nullptr) {
+        P = nullptr;
+        return;
+    }
+
+    P = L.First;
+    if (L.First == L.Last) {
+        L.First = nullptr;
+        L.Last = nullptr;
+    } else {
+        L.First = L.First->next;
+        L.First->prev = nullptr;
+    }
+    P->next = nullptr;
+}
+
+void deleteLast(List &L, address &P) {
+    if (L.Last == nullptr) {
+        P = nullptr;
+        return;
+    }
+
+    P = L.Last;
+    if (L.First == L.Last) {
+        L.First = nullptr;
+        L.Last = nullptr;
+    } else {
+        L.Last = L.Last->prev;
+        L.Last->next = nullptr;
+    }
+    P->prev = nullptr;
+}
+
+void deleteAfter(List &L, address &P, address Prec) {
+    if (Prec == nullptr || Prec->next == nullptr) {
+        P = nullptr;
+        return;
+    }
+    P = Prec->next;
+
+    Prec->next = P->next;
+
+    if (P->next == nullptr) {
+        L.Last = Prec;
+    } else {
+        P->next->prev = Prec;
+    }
+    P->next = nullptr;
+    P->prev = nullptr;
+}
+
+void deleteElm(List &L, address &P, infotype x) {
+    address temp = L.First;
+    while (temp != nullptr && temp->info.nopol != x.nopol) {
+        temp = temp->next;
+    }
+    if (temp == nullptr) {
+        cout << "Kendaraan dengan nomor polisi " << x.nopol << " tidak ditemukan.\n";
+        P = nullptr;
+        return;
+    }
+
+    if (temp == L.First) {
+        deleteFirst(L, P);
+    } else if (temp == L.Last) {
+        deleteLast(L, P);
+    } else {
+        deleteAfter(L, temp->prev, P);
+    }
+}
