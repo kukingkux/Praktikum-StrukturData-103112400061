@@ -102,7 +102,7 @@ void deleteLast(List &L, address &P) {
     P->prev = nullptr;
 }
 
-void deleteAfter(List &L, address &P, address Prec) {
+void deleteAfter(List &L, address Prec, address &P) {
     if (Prec == nullptr || Prec->next == nullptr) {
         P = nullptr;
         return;

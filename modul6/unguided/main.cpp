@@ -46,9 +46,10 @@ int main() {
                 cout << "Masukkan Nomor Polisi Yang Akan Dihapus: ";
                 cin >> kendaraan.nopol;
                 deleteElm(L, deletedNode, kendaraan);
-                if (deletedNode != nullptr)
+                if (deletedNode != nullptr) {
                     dealokasi(deletedNode);
                     cout << "Data dengan nomor polisi " << kendaraan.nopol << " berhasil dihapus.\n";
+                }
                 break;
             case 4:
                 printInfo(L);
