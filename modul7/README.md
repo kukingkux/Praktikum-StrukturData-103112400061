@@ -164,6 +164,27 @@ Singly linked List adalah bentuk paling sederhana dari linked list, di mana seti
 Doubly Linked List adalah jenis linked list yang di mana setiap node mengandung 3 bagian: data, pointer ke node berikutnya, dan pointer ke node sebelumnya. Struktur ini memungkinkan penelusuran daftar ke arah depan dan belakang, berbeda dengan Singly Linked List yang hanya dapat ditelusuri ke arah depan.
 ![Diagram doubly linked list](assets/doubly-linked-list-in-c.webp)
 
+### 9. **Stack**
+
+Kontainer stack mengikuti urutan LIFO (Last In First Out) untuk proses insert dan delete. Artinya, elemen yang dimasukkan paling akhir akan dihapus terlebih dahulu, dan elemen yang dimasukkan paling awal akan dihapus terakhir. Hal ini dilakukan dengan insert dan delete elemen hanya pada satu sisi stack yang umumnya disebut sebagai top (puncak) dari stack.
+
+**Operasi dasar Stack**
+
+**1. Inserting Elements**<br>
+Dalam stack, elemen baru hanya bisa di-insert di bagian top dari stack dengan menggunakan method push().
+
+**2. Accessing Elements**<br>
+Hanya elemen di bagian top dari stack yang bisa diakses menggunakan method top().
+
+**3. Deleting Elements**<br>
+Dalam stack, hanya elemen di bagian top yang bisa di-delete menggunakan method pop() dalam satu operasi.
+
+**4. empty()**<br>
+Method ini mengecek apakah stack kosong. Method ini mengembalikan true jika stack tidak memiliki elemen; jika tidak, method ini mengembalikan false.
+
+**5. Size of stack**<br>
+Function size() pada stack mengembalikan jumlah elemen yang sedang ada di dalam stack. Function ini membantu mengetahui berapa banyak item yang tersimpan tanpa memodifikasi stack.
+
 ## Unguided
 
 Di bawah ini merupakan code untuk pengerjaan unguided soal 1-3.
@@ -196,148 +217,89 @@ void getInputStream(Stack &S);
 
 <br>
 
-`Doublylist.cpp`
+`stack.cpp`
 
 ```c++
 #include <iostream>
-#include "Doublylist.h"
+#include "stack.h"
 using namespace std;
 
-void CreateList(List &L) {
-    L.First = nullptr;
-    L.Last = nullptr;
+// -1 adalah tanda bahwa stack kosong
+
+void CreateStack(Stack &S) {
+    S.top = -1;
 }
 
-address alokasi(const infotype &x) {
-    address P = new ElmList;
-    P->info = x;
-    P->next = nullptr;
-    P->prev = nullptr;
-    return P;
-}
-
-void dealokasi(address &P) {
-    delete P;
-}
-
-void printInfo(const List &L) {
-    address P = L.First;
-    cout << "DATA LIST 1: \n";
-    while (P != nullptr) {
-        cout << "no polisi  : " << P->info.nopol << endl;
-        cout << "warna      : " << P->info.warna << endl;
-        cout << "tahun      : " << P->info.thnBuat << endl;
-        cout << "----------------------\n";
-        P = P->next;
+void push(Stack &S, infotype x) {
+    if (S.top < 19) {
+        S.top++;
+        S.info[S.top] = x;
+    } else {
+        cout << "Stack penuh.\n";
     }
 }
 
-void insertLast(List &L, address P) {
-    string cekNopol = P->info.nopol;
-    address current = L.First;
-
-    while (current != nullptr) {
-        if (current->info.nopol == cekNopol) {
-            cout << "nomor polisi sudah terdaftar.\n";
-            dealokasi(P);
-            return;
+void pushAscending(Stack &S, infotype x) {
+    int i = S.top;
+    push(S, x);
+    while (i >= 0 && S.info[i] > x) {
+        int temp = S.info[i]; // Keishin Naufa A
+        if (i + 1 <= S.top) {
+            S.info[i + 1] = temp;
         }
-        current = current->next;
-    }
-
-    if (L.First == nullptr) {
-        L.First = P;
-        L.Last = P;
-    } else {
-        L.Last->next = P;
-        P->prev = L.Last;
-        L.Last = P;
+        S.info[i] = x;
+        i--;
     }
 }
 
-void findElm(List L, infotype x) {
-    address P = L.First;
-    while (P != nullptr && x.nopol != P->info.nopol) {
-        P = P->next;
-    }
-    if (P != nullptr) {
-        cout << "Nomor Polisi   : " << P->info.nopol << endl;
-        cout << "Warna          : " << P->info.warna << endl;
-        cout << "Tahun          : " << P->info.thnBuat << endl;
-    } else {
-        cout << "Kendaraan dengan nomor polisi " << x.nopol << " tidak ditemukan.\n";
+void getInputStream(Stack &S) {
+    string input;
+    cin >> input;
+    for (int i = 0; i < input.length(); i++) {
+        char c = input[i];
+        infotype x = c - '0';
+        push(S, x); // 103112400061
     }
 }
 
-void deleteFirst(List &L, address &P) {
-    if (L.First == nullptr) {
-        P = nullptr;
+infotype pop (Stack &S) {
+    if (S.top >= 0) {
+        infotype x = S.info[S.top];
+        S.top--;
+        return x;
+    } else {
+        cout << "Stack kosong.\n";
+        return -1;
+    }
+}
+
+void printInfo(const Stack &S) {
+    if (S.top == -1) {
+        cout << "Stack kosong.\n";
+    } else {
+        cout << "[TOP] ";
+        for (int i = S.top; i >= 0; i--) {
+            cout << S.info[i] << " ";
+        }
+        cout << endl;
+    }
+}
+
+void balikStack(Stack &S) {
+    if (S.top <= 0) {
         return;
     }
 
-    P = L.First;
-    if (L.First == L.Last) {
-        L.First = nullptr;
-        L.Last = nullptr;
-    } else {
-        L.First = L.First->next;
-        L.First->prev = nullptr;
-    }
-    P->next = nullptr;
-}
+    infotype temp;
+    int start = 0;
+    int end = S.top;
 
-void deleteLast(List &L, address &P) {
-    if (L.Last == nullptr) {
-        P = nullptr;
-        return;
-    }
-
-    P = L.Last;
-    if (L.First == L.Last) {
-        L.First = nullptr;
-        L.Last = nullptr;
-    } else {
-        L.Last = L.Last->prev;
-        L.Last->next = nullptr;
-    }
-    P->prev = nullptr;
-}
-
-void deleteAfter(List &L, address Prec, address &P) {
-    if (Prec == nullptr || Prec->next == nullptr) {
-        P = nullptr;
-        return;
-    }
-    P = Prec->next;
-
-    Prec->next = P->next;
-
-    if (P->next == nullptr) {
-        L.Last = Prec;
-    } else {
-        P->next->prev = Prec;
-    }
-    P->next = nullptr;
-    P->prev = nullptr;
-}
-
-void deleteElm(List &L, address &P, infotype x) {
-    address temp = L.First;
-    while (temp != nullptr && temp->info.nopol != x.nopol) {
-        temp = temp->next;
-    }
-    if (temp == nullptr) {
-        cout << "Kendaraan dengan nomor polisi " << x.nopol << " tidak ditemukan.\n";
-        P = nullptr;
-        return;
-    }
-
-    if (temp == L.First) {
-        deleteFirst(L, P);
-    } else if (temp == L.Last) {
-        deleteLast(L, P);
-    } else {
-        deleteAfter(L, temp->prev, P);
+    while (start < end) {
+        temp = S.info[start];
+        S.info[start] = S.info[end];
+        S.info[end] = temp;
+        start++;
+        end --;
     }
 }
 ```
@@ -348,187 +310,150 @@ void deleteElm(List &L, address &P, infotype x) {
 
 ```c++
 #include <iostream>
-#include "Doublylist.h"
+#include "stack.h"
 using namespace std;
 
 int main() {
-    List L;
-    CreateList(L);
-    infotype kendaraan;
-    address deletedNode;
+    cout << "Hello World!" << endl;
+    Stack S;
+    CreateStack(S);
 
-    int input;
+    // unguided 1
+    // push(S, 3);
+    // push(S, 4);
+    // push(S, 8);
+    // pop(S);
+    // push(S, 2);
+    // push(S, 3);
+    // pop(S);
+    // push(S, 9);
 
-    do {
-        cout << "\n===== MENU DATA KENDARAAN KEPOLISIAN NASI HUY =====\n";
-        cout << "1. Insert Belakang\n";
-        cout << "2. Cari Kendaraan\n";
-        cout << "3. Hapus Data\n";
-        cout << "4. Tampilkan Data\n";
-        cout << "0. Keluar\n";
-        cout << "===================================\n";
-        cout << "Pilih menu: ";
-        cin >> input;
+    // unguided 2
+    // pushAscending(S, 3);
+    // pushAscending(S, 4);
+    // pushAscending(S, 8);
+    // pushAscending(S, 2);
+    // pushAscending(S, 3);
+    // pushAscending(S, 9);
 
-        switch (input) {
-            case 1:
-                while (true) {
-                    cout << "masukkan nomor polisi (ketik 0 untuk kembali): ";
-                    cin >> kendaraan.nopol;
-                    if (kendaraan.nopol == "0") {
-                        break;
-                    }
-                    cout << "masukkan warna kendaraan: ";
-                    cin >> kendaraan.warna;
-                    cout << "masukkan tahun kendaraan: ";
-                    cin >> kendaraan.thnBuat;
-                    insertLast(L, alokasi(kendaraan));
-                    cout << endl;
-                };
-                break;
-            case 2:
-                cout << "Masukkan nomor polisi yang dicari: ";
-                cin >> kendaraan.nopol;
-                findElm(L, kendaraan);
-                break;
-            case 3:
-                cout << "Masukkan Nomor Polisi Yang Akan Dihapus: ";
-                cin >> kendaraan.nopol;
-                deleteElm(L, deletedNode, kendaraan);
-                if (deletedNode != nullptr) {
-                    dealokasi(deletedNode);
-                    cout << "Data dengan nomor polisi " << kendaraan.nopol << " berhasil dihapus.\n";
-                }
-                break;
-            case 4:
-                printInfo(L);
-                break;
-            case 0:
-                cout << "👋 Keluar dari program.\n";
-                break;
-            default:
-                cout << "Pilihan tidak valid.\n";
-        }
-    } while (input != 0);
+    // unguided 3
+    getInputStream(S);
 
+    printInfo(S);
+    cout << "Balik stack" << endl;
+    balikStack(S);
+    printInfo(S);
     return 0;
 }
 ```
 
 ### Unguided 1
 
-Buatlah ADT Doubly Linked list sebagai berikut di dalam file “Doublylist.h”:
+Buatlah ADT Stack menggunakan _ARRAY_ sebagai berikut di dalam file **“stack.h”**:
 
 ```
-Type infotype : kendaraan <
-    nopol : string
-    warna : string
-    thnBuat : integer
+Type infotype : integer
+Type Stack <
+    info : array [20] of integer
+    top : integer
 >
-Type address : pointer to ElmList
-Type ElmList <
-    info : infotype
-    next :address
-    prev : address
->
-
-Type List <
-    First : address
-    Last : address
->
-
-procedure CreateList( input/output L : List )
-function alokasi( x : infotype ) → address
-procedure dealokasi(input/output P : address )
-procedure printInfo( input L : List )
-procedure insertLast(input/output L : List,
-   input P : address )
+procedure CreateStack( input/output S : Stack )
+procedure push(input/output S : Stack,
+   input x : infotype)
+function pop(input/output t S : Stack )
+   → infotype
+procedure printInfo( input S : Stack )
+procedure balikStack(input/output S :
+   Stack )
 ```
 
-Buatlah implementasi ADT Doubly Linked list pada file “Doublylist.cpp” dan coba hasil
-implementasi ADT pada file “main.cpp”.
+Buatlah implementasi ADT Stack menggunakan Array pada file “**stack.cpp”** dan “**main.cpp**”.
 
-> output<br>![Screenshot output unguided 1](output/unguided1_1.png)![Screenshot output unguided 1](output/unguided1_2.png)
+> output<br>![Screenshot output unguided 1](output/unguided1.png)
 
-Program sistem data kendaraan kepolisian. Menggunakan doubly-linked list sebagai wadah penyimpanand data kendaraan. Terdapat 3 buah file yang terdiri dari 1 file header (`Doublylist.h`), 1 file ADT (`Doublylist.cpp`), dan 1 file utama (`main.cpp`).
+Program implementasi stack pada C++. Menggunakan 2 operasi stack yaitu _push_ & _pop_. Terdapat 3 buah file yang terdiri dari 1 file header (`stack.h`), 1 file ADT (`stack.cpp`), dan 1 file utama (`main.cpp`).
 
-1. Doublylist.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
+1. stack.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
 
-   - struct infotype: Menyimpan data kendaraan (nopol, warna, thnBuat).
+   - infotype: definisi type **integer**.
 
-   - struct ElmList: Mendefinisikan node yang berisi info, pointer next, dan pointer prev.
+   - struct stack: Mendefinisikan tinggi stack (info) berupa array, dan bagian paling atas stack (top).
 
-   - struct List: Menyimpan pointer ke elemen pertama (First) dan elemen terakhir (Last).
+2. stack.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
 
-2. Doublylist.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
+   - `CreateStack()`: Prosedur untuk inisialisasi stack. Mengatur `top = -1` sebagai penanda bahwa stack kosong. Kenapa `-1`? Karena array dimulai dari index `0`, sehingga `-1` menandakan bahwa array masih kosong.
 
-   - `CreateList()`: Prosedur untuk inisialisasi list. Mengatur First dan Last menjadi nullptr yang menandakan list masih kosong.
+   - `push()`: Prosedur ini memindahkan top ke atas sebanyak 1 kali, lalu memasukkan value x ke dalam Stack.
 
-   - `alokasi()`: Function ini membuat node baru di memori (new ElmList), mengisinya dengan infotype, dan mengembalikan address dari node baru tersebut.
+   - `pop()`: Function ini mengambil value paling atas pada Stack dan return value tersebut ke dalam x. Setelah mengambil value paling atas, maka pointer akan turun sebanyak 1 kali dengan `S.top--`.
 
-   - `insertLast()`: Prosedur ini menambahkan node di akhir list. Terdapat validasi unik untuk nopol. Jika nopol sudah ada, node baru akan di-dealokasi dan insert akan dibatalkan. Jika list kosong (`L.First == nullptr`), node baru menjadi First dan Last. Jika tidak, node baru disambungkan setelah `L.Last.`
+   - `printInfo()`: Prosedur ini mencetak jika stack tidak kosong dimulai dari paling atas atau `S.top` hingga isi dari stack mencapai paling bawah.
 
-3. `main.cpp`: File utama yang berisi menu program. File ini memanggil function dari `Doublylist.cpp` untuk menjalankan operasi list.
+   - `balikStack()`:<br>
+     Prosedur ini membalikkan isi stack. Cara kerjanya adalah menggunakan 3 variabel, `temp`, `start`, `end` dengan `start = 0` dan `end = S.top`. Menggunakan perulanganwhile dengan kondisi `start < end`. Pertama, `temp` akan dimasukkan value dari elemen pertama (paling atas stack); Kedua, elemen pertama akan diganti valuenya menjadi value dari elemen terakhir; Ketiga, elemen terakhir akan diganti valuenya menjadi value dari `temp`. Kemudian `start` increment dan `end` decrement. Akan berulang terus hingga kondisi perulangan sudah tidak.
+
+3. `main.cpp`: File utama untuk memanggil function dari `stack.cpp` untuk menjalankan operasi stack.
 
 ### Unguided 2
 
-Carilah elemen dengan nomor polisi D001 dengan membuat fungsi baru.
-fungsi findElm( L : List, x : infotype ) : address
+Tambahkan prosedur pushAscending( in/out S : Stack, in x : integer).
+
+```c++
+void pushAscending(Stack &S, infotype x) {
+    int i = S.top;
+    push(S, x);
+    while (i >= 0 && S.info[i] > x) {
+        int temp = S.info[i]; // Keishin Naufa A
+        if (i + 1 <= S.top) {
+            S.info[i + 1] = temp;
+        }
+        S.info[i] = x;
+        i--;
+    }
+}
+```
 
 > output<br>![Screenshot output unguided 2](output/unguided2.png)
 
-Prosedur findElm() digunakan untuk mencari data kendaraan berdasarkan nomor polisi (nopol).
+Prosedur pushAscending() digunakan untuk memasukkan value ke dalam stack secara terurut dari kecil-ke-besar.
 
-- Algoritma yang digunakan adalah Sequential Search.
+- Algoritma yang digunakan adalah Sequential.
 
-- Pencarian dimulai dari `L.First` menggunakan pointer P.
+- Dimulai dengan `push()` value yang di-input.
 
-- Loop while akan terus berjalan `(P = P->next)` selama P belum nullptr (belum akhir list) dan nopol yang dicari `(x.nopol)` belum ditemukan `(P->info.nopol)`.
-
-- Setelah loop berhenti, ada dua kemungkinan:
-
-  1. Jika `P != nullptr`, loop berhenti karena nopol ditemukan. Program akan print detail kendaraan.
-
-  2. Jika `P == nullptr`, loop berhenti karena sudah sampai akhir list dan data tidak ditemukan. Program akan print "tidak ditemukan".
+- Membandingkan value yang diinputkan dengan value sebelumnya (bawah). Jika value sebelumnya (bawah) lebih besar dari value yang baru di-inputkan, maka value sebelumnya akan ditukar dengan value yang baru di-inputkan.
 
 ### Unguided 3
 
-Hapus elemen dengan nomor polisi D003 dengan procedure delete.
+Tambahkan prosedur **getInputStream**( in/out S : Stack ). Prosedur akan terus membaca dan
+menerima input user dan memasukkan setiap input ke dalam stack hingga user menekan
+tombol enter. Contoh: gunakan cin.get() untuk mendapatkan inputan user.
 
-- procedure deleteFirst( input/output L : List,  
-  P : address )
-- procedure deleteLast( input/output L : List,  
-  P : address )
-- procedure deleteAfter( input Prec : address,  
-  input/output P : address )
+```c++
+void getInputStream(Stack &S) {
+    string input;
+    cin >> input;
+    for (int i = 0; i < input.length(); i++) {
+        char c = input[i];
+        infotype x = c - '0';
+        push(S, x); // 103112400061
+    }
+}
+```
 
 > output<br>![Screenshot output unguided 3](output/unguided3.png)
 
-Function untuk menghapus data dipecah menjadi beberapa prosedur (helper) untuk menangani setiap kasus secara spesifik dengan prosedur utamanya adalah `deleteElm()`.
+Prosedur untuk menambahkan data ke dalam Stack dengan input dari user.
 
-Cara kerja `deleteElm()`:
+Cara kerja `getInputStream()`:
 
-1. Search Data: Langkah pertama adalah mencari node yang akan dihapus menggunakan algoritma Sequential Search, mirip dengan `findElm()`. Pointer `temp` akan berjalan dari L.First sampai menemukan nopol yang cocok atau sampai `temp` menjadi nullptr.
+1. User input satu baris angka dengan tipe data `string`.
 
-2. Tentukan Posisi: Setelah loop, jika `temp` adalah nullptr, berarti data tidak ditemukan. Jika data ditemukan, program akan mengecek posisi `temp`:
+2. Masuk ke perulangan untuk memecah string menjadi karakter individual. Menggunakan `for` loop dengan kondisi `i < input.length()` (`input.length()`) untuk mengukur seberapa panjang string yang telah diinput.
 
-   - Jika `temp == L.First`, panggil `deleteFirst()`.
+3. Dalam perulangan, terdapat variabel `c` dengan tipe data `char` untuk mengambil satu value dari `string`. Setelah itu pada variabel `x` dengan tipe data `infotype` (integer), `c - '0'` untuk mendapatkan value sebenarnya, karena value pada `c` masih berupa kode character.
 
-   - Jika `temp == L.Last`, panggil `deleteLast()`.
-
-   - Jika bukan keduanya (data di tengah), panggil `deleteAfter()`. Dapatkan node sebelumnya `(temp->prev)` untuk dijadikan parameter `Prec` pada `deleteAfter()`.
-
-Prosedur Helper:
-
-- `deleteFirst(List &L, address &P)`: Menghapus elemen pertama dari list. Pointer `L.First` digeser ke `L.First->next`. Kemudian, `prev` dari `L.First` yang baru diatur menjadi nullptr.
-
-- `deleteLast(List &L, address &P)`: Menghapus elemen terakhir dari list. Pointer `L.Last` digeser ke `L.Last->prev`. Kemudian, `next` dari `L.Last` yang baru diatur menjadi nullptr.
-
-- `deleteAfter(List &L, address Prec, address &P)`: Menghapus node `P` yang berada setelah `Prec`. `Prec->next` dihubungkan ke `P->next`, dan `P->next->prev` disambungkan kembali ke `Prec`.
-
-Di `main.cpp`, variabel `deletedNode` dioper by reference ke `deleteElm()`. Bertujuan agar `deleteElm()` dapat return alamat dari node yang telah diputus.
-
-Setelah itu, `main()` akan memanggil `dealokasi(deletedNode)`. dealokasi sangat penting untuk return memori yang sudah tidak terpakai ke sistem dan mencegah memory leak.
+4. `push()` variabel `x` ke dalam Stack.
 
 ## Referensi
 
@@ -539,3 +464,4 @@ Setelah itu, `main()` akan memanggil `dealokasi(deletedNode)`. dealokasi sangat 
 5. _petanikode_ . https://www.petanikode.com/cpp-array/. Diakses pada 06 Oktober 2025.
 6. _GeekForGeeks_. https://www.geeksforgeeks.org/cpp/cpp-linked-list/. Diakses pada 13 Oktober 2025.
 7. _GeekForGeeks_. https://www.geeksforgeeks.org/cpp/doubly-linked-list-in-cpp/. Diakses pada 27 Oktober 2025.
+8. _GeekForGeeks_. https://www.geeksforgeeks.org/cpp/stack-in-cpp-stl/. Diakses pada 4 November 2025.
