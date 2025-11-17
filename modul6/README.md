@@ -1,4 +1,4 @@
-# <h1 align="center">Laporan Praktikum Modul 1 <br> PENGENALAN BAHASA C++ (BAGIAN PERTAMA)</h1>
+# <h1 align="center">Laporan Praktikum Modul 6 <br>DOUBLY LINKED LIST</h1>
 
 <p align="center">KEISHIN NAUFA ALFARIDZHI - 103112400061</p>
 
