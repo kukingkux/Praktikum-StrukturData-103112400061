@@ -1,4 +1,4 @@
-# <h1 align="center">Laporan Praktikum Modul 5 <br>SINGLY LINKED LIST</h1>
+# <h1 align="center">Laporan Praktikum Modul 5 <br>SINGLY LINKED LIST (BAGIAN KEDUA)</h1>
 
 <p align="center">KEISHIN NAUFA ALFARIDZHI - 103112400061</p>
 
