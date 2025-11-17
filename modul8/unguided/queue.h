@@ -7,7 +7,7 @@ const int MAX = 5;
 using infotype = int;
 
 struct Queue {
-    infotype info[5];
+    infotype info[MAX];
     int head, tail;
 };
 

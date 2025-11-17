@@ -11,6 +11,12 @@ bool isEmptyQueue(const Queue &Q) {
     return (Q.head == -1 && Q.tail == -1);
 }
 
+// unguided 1, 2 - alternatif 1 dan 2
+// bool isFullQueue(const Queue &Q) {
+//     return (Q.tail == MAX - 1);
+// }
+
+// unguided 3 - alternatif 3 circular queue
 bool isFullQueue(const Queue &Q) {
     return (Q.tail + 1) % MAX == Q.head;
 }
@@ -99,14 +105,33 @@ int dequeue(Queue &Q) {
     }
 }
 
+// unguided 1, 2 - alternatif 1 dan 2
+// void printInfo(const Queue &Q) {
+//     if (isEmptyQueue(Q)) {
+//         cout << "Queue kosong!" << endl;
+//     } else {
+//         cout << "Queue : ";
+//         for (int i = Q.head; i <= Q.tail; i++) {
+//             cout << Q.info[i] << " ";
+//         }
+//         cout << endl;
+//     }
+// }
+
+// unguided 3 - alternatif 3 circular queue
 void printInfo(const Queue &Q) {
     if (isEmptyQueue(Q)) {
         cout << "Queue kosong!" << endl;
     } else {
         cout << "Queue : ";
-        for (int i = Q.head; i <= Q.tail; i++) {
+        int i = Q.head;
+        
+        while (i != Q.tail) {
             cout << Q.info[i] << " ";
+            i = (i + 1) % MAX;
         }
+        
+        cout << Q.info[Q.tail] << " ";
         cout << endl;
     }
 }
