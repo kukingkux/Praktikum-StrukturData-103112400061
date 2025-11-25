@@ -18,3 +18,21 @@ void insertNode(address &root, infotype x) {
     else
         insertNode(root->right, x);
 }
+
+address findNode(infotype x, address root) {
+    if (root == NULL || root->info == x)
+        return root;
+
+    if (x < root->info)
+        return findNode(x, root->left);
+
+    return findNode(x, root->right);
+}
+
+void printInOrder(address root) {
+    if (root != NULL) {
+        printInOrder(root->left);
+        printInOrder(root->right);
+        cout << root->info << " ";
+    }
+}
