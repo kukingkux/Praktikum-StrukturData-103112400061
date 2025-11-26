@@ -15,5 +15,9 @@ int main() {
     insertNode(root,6);
     insertNode(root,7);
     printInOrder(root);
+    cout<<"\n"; 
+    cout<<"Jumlah Node  : " << hitungJumlahNode(root) << endl;
+    cout<<"Kedalaman    : " << hitungKedalaman(root,0) << endl;
+    cout<<"Total        : " << hitungTotalInfo(root) << endl;
     return 0;
 }

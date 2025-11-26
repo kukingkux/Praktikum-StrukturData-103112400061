@@ -31,6 +31,36 @@ address findNode(infotype x, address root) {
     return findNode(x, root->right);
 }
 
+int hitungJumlahNode(address root) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    return 1 + hitungJumlahNode(root->right) + hitungJumlahNode(root->left);
+}
+
+int hitungTotalInfo(address root) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    return root->info + hitungTotalInfo(root->right) + hitungTotalInfo(root->left);
+}
+
+int hitungKedalaman(address root, int start) {
+    if (root == NULL) {
+        return start;
+    }
+    
+    int left = hitungKedalaman(root->left, start + 1);
+    int right = hitungKedalaman(root->right, start + 1);
+
+    if (left > right) {
+        return left;
+    }
+    return right;
+}
+
 void printInOrder(address root) {
     if (root != NULL) {
         printInOrder(root->left);

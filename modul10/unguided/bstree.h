@@ -13,6 +13,10 @@ struct Node {
 address alokasi(infotype x);
 void insertNode(address &root, infotype x);
 address findNode(infotype x, address root);
+int hitungJumlahNode(address root);
+int hitungTotalInfo(address root);
+int hitungKedalaman(address root, int start);
+
 void printInOrder(address root);
 
 #endif
