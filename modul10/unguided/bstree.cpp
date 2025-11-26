@@ -10,12 +10,14 @@ address alokasi(infotype x) {
 }
 
 void insertNode(address &root, infotype x) {
-    if (root == NULL)
-        alokasi(x);
+    if (root == NULL) {
+        root = alokasi(x);
+        return;
+    }
 
     if (x < root->info)
         insertNode(root->left, x);
-    else
+    else if (x > root->info)
         insertNode(root->right, x);
 }
 
@@ -32,7 +34,7 @@ address findNode(infotype x, address root) {
 void printInOrder(address root) {
     if (root != NULL) {
         printInOrder(root->left);
+        cout << root->info << " - ";
         printInOrder(root->right);
-        cout << root->info << " ";
     }
 }

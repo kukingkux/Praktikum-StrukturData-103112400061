@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
     cout << "Hello Mok!" << endl;
-    address *root = NULL;
+    address root = NULL;
     insertNode(root,1);
     insertNode(root,2);
     insertNode(root,6);
