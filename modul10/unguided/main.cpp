@@ -14,7 +14,15 @@ int main() {
     insertNode(root,3);
     insertNode(root,6);
     insertNode(root,7);
+    cout << "Pre Order  : ";
+    printPreOrder(root);
+    cout << endl;
+    cout << "In Order   : ";
     printInOrder(root);
+    cout << endl;
+    cout << "Post Order : ";
+    printPostOrder(root);
+    cout << endl;
     cout<<"\n"; 
     cout<<"Jumlah Node  : " << hitungJumlahNode(root) << endl;
     cout<<"Kedalaman    : " << hitungKedalaman(root,0) << endl;

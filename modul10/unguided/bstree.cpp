@@ -61,10 +61,26 @@ int hitungKedalaman(address root, int start) {
     return right;
 }
 
+void printPreOrder(address root) {
+    if (root != NULL) {
+        cout << root->info << " - ";
+        printPreOrder(root->left);
+        printPreOrder(root->right);
+    }
+}
+
 void printInOrder(address root) {
     if (root != NULL) {
         printInOrder(root->left);
         cout << root->info << " - ";
         printInOrder(root->right);
+    }
+}
+
+void printPostOrder(address root) {
+    if (root != NULL) {
+        printPostOrder(root->left);
+        printPostOrder(root->right);
+        cout << root->info << " - ";
     }
 }

@@ -18,5 +18,7 @@ int hitungTotalInfo(address root);
 int hitungKedalaman(address root, int start);
 
 void printInOrder(address root);
+void printPreOrder(address root);
+void printPostOrder(address root);
 
 #endif
