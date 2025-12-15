@@ -518,22 +518,12 @@ void printPostOrder(address root) {
 }
 ```
 
+> output<br>![Screenshot output unguided 3](output/unguided3.png)
+
 Penjelasan setiap fungsi:
 
 - `printPreOrder()`: Prosedur ini akan print value secara PreOrder yang mana akan print value dari tengah, ke subtree sebelah kiri, lalu subtree sebelah kanan secara berurutan. Prosedur ini dilakukan secara rekursif.
 - `printPostOrder()`: Prosedur ini akan print value secara PostOrder yang mana akan print value dari subtree sebelah kiri, ke subtree sebelah kanan, lalu ke tengah secara berurutan. Prosedur ini dilakukan secara rekursif.
-
-> output<br>![Screenshot output unguided 3](output/unguided3.png)
-
-Perubahan dari alternatif 1 ke alternatif 2 yang terjadi:
-
-- `isFullQueue()`: Cek apakah tail ada di belakang head `(Q.tail + 1) % MAX == Q.head`.
-
-- `enqueue()`: Tail akan pindah ke awal Queue (`0`) jika sudah berada di akhir Queue (`MAX - 1`).
-
-- `dequeue()`: Setelah mengambil value pada posisi head, maka pointer head akan mundur sebanyak 1 kali dengan `Q.head++`. Head akan pindah ke awal Queue (`0`) jika sudah berada di akhir Queue (`MAX - 1`).
-
-- `printInfo()`: Print tidak dari depan Queue ke belakang, tapi berputar. Dengan cara `i` modulo dengan `MAX` (`i % MAX`), maka `i` akan dapat kembali ke index `0` (awal Queue).
 
 ## Referensi
 
