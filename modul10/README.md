@@ -498,65 +498,30 @@ Penjelasan setiap fungsi:
 
 ### Unguided 3
 
-Buatlah implementasi ADT _Queue_ pada file “_queue.cpp_” dengan menerapkan mekanisme _queue_ Alternatif 3 (_head_ dan _tail_ berputar).
+Print tree secara pre-order dan post-order.
 
 ```c++
-bool isFullQueue(const Queue &Q) {
-    return (Q.tail + 1) % MAX == Q.head;
-}
-
-void enqueue(Queue &Q, infotype x) {
-    if (isFullQueue(Q)) {
-        cout << "Queue penuh! Tidak bisa menambah data." << endl;
-    } else {
-        if (isEmptyQueue(Q)) {
-            Q.head = Q.tail = 0;
-        } else {
-            if (Q.tail == MAX - 1) {
-                Q.tail = 0;
-            } else {
-                Q.tail++;
-            }
-        }
-        Q.info[Q.tail] = x;
-        cout << "Enqueue: " << x << endl;
+void printPreOrder(address root) {
+    if (root != NULL) {
+        cout << root->info << " - ";
+        printPreOrder(root->left);
+        printPreOrder(root->right);
     }
 }
 
-int dequeue(Queue &Q) {
-    if (isEmptyQueue(Q)) {
-        cout << "Queue kosong! Tidak ada data yang dihapus." << endl;
-    } else {
-        cout << "Dequeue: " << Q.info[Q.head] << endl;
-        if (Q.head == Q.tail) {
-            Q.head = Q.tail = -1;
-        } else {
-            if (Q.head == MAX - 1) {
-                Q.head = 0;
-            } else {
-                Q.head++;
-            }
-        }
-    }
-}
-
-void printInfo(const Queue &Q) {
-    if (isEmptyQueue(Q)) {
-        cout << "Queue kosong!" << endl;
-    } else {
-        cout << "Queue : ";
-        int i = Q.head;
-
-        while (i != Q.tail) {
-            cout << Q.info[i] << " ";
-            i = (i + 1) % MAX;
-        }
-
-        cout << Q.info[Q.tail] << " ";
-        cout << endl;
+void printPostOrder(address root) {
+    if (root != NULL) {
+        printPostOrder(root->left);
+        printPostOrder(root->right);
+        cout << root->info << " - ";
     }
 }
 ```
+
+Penjelasan setiap fungsi:
+
+- `printPreOrder()`: Prosedur ini akan print value secara PreOrder yang mana akan print value dari tengah, ke subtree sebelah kiri, lalu subtree sebelah kanan secara berurutan. Prosedur ini dilakukan secara rekursif.
+- `printPostOrder()`: Prosedur ini akan print value secara PostOrder yang mana akan print value dari subtree sebelah kiri, ke subtree sebelah kanan, lalu ke tengah secara berurutan. Prosedur ini dilakukan secara rekursif.
 
 > output<br>![Screenshot output unguided 3](output/unguided3.png)
 
