@@ -196,6 +196,24 @@ Berbeda dengan vector, elemen dalam queue tidak diakses berdasarkan nomor indeks
 **Operasi dasar Stack**<br>
 Terdapat 2 operasi berupa Enqueue untuk insert, dan Dequeue untuk delete.
 
+### 11. **BST (Binary Search Tree)**
+
+Dalam C++, B-tree adalah struktur data balanced tree yang menjaga data tetap terurut dan memungkinkan proses search, sequential access, insert, dan delete dalam waktu logaritmik. B-tree merupakan generalisasi dari Binary Search Tree (BST) karena sebuah node dapat memiliki lebih dari dua child. B-tree dioptimalkan untuk sistem yang melakukan read dan write data dalam blok berukuran besar. Pada artikel ini, kita akan mempelajari cara mengimplementasikan B-tree dalam bahasa pemrograman C++.
+
+**Properti B-tree**<br>
+B-tree adalah self-balancing search tree di mana setiap node dapat memiliki banyak child. Struktur ini menjaga keseimbangan dengan memastikan semua leaf node berada pada level yang sama. Jumlah child dari sebuah node dibatasi dalam rentang tertentu yang telah ditentukan sebelumnya.
+
+- B-tree memiliki properti sebagai berikut:
+- Setiap node memiliki maksimal m child.
+- Setiap non-leaf node (kecuali root) memiliki minimal ⌈m/2⌉ child.
+- Root node memiliki minimal dua child.
+- Non-leaf node dengan k child memiliki k−1 key.
+- Semua leaf node berada pada level yang sama dan tidak menyimpan key.
+
+**Implementasi B-tree dalam C++**<br>
+B-tree dapat diimplementasikan menggunakan sebuah struktur node yang berisi array key dan array pointer ke child. Jumlah key dalam sebuah node selalu satu lebih sedikit dibandingkan jumlah pointer ke child. Diagram berikut merepresentasikan struktur dari sebuah B-tree:
+![Diagram B-tree](assets/BTree.png)
+
 ## Unguided
 
 Di bawah ini merupakan code untuk pengerjaan unguided soal 1-3.
@@ -426,30 +444,57 @@ Program implementasi bstree pada C++. Diimplementasikan menggunakan Linked List 
 
 ### Unguided 2
 
-Buatlah implementasi ADT _Queue_ pada file “_queue.cpp_” dengan menerapkan mekanisme _queue_ Alternatif 2 (_head_ bergerak, _tail_ bergerak).
+Buatlah fungsi untuk menghitung jumlah node dengan fungsi berikut.
+
+- fungsi hitungJumlahNode( root:address ) : integer
+  /_ fungsi mengembalikan integer banyak node yang ada di dalam BST_/
+
+- fungsi hitungTotalInfo( root:address, start:integer ) : integer
+  /_ fungsi mengembalikan jumlah (total) info dari node-node yang ada di dalam BST_/
+
+- fungsi hitungKedalaman( root:address, start:integer ) : integer
+  /_ fungsi rekursif mengembalikan integer kedalaman maksimal dari binary tree _/
 
 ```c++
-// unguided 2 - alternatif 2
-int dequeue(Queue &Q) {
-    if (isEmptyQueue(Q)) {
-        cout << "Queue kosong! Tidak ada data yang dihapus." << endl;
-    } else {
-        cout << "Dequeue: " << Q.info[Q.head] << endl;
-        if (Q.head == Q.tail) {
-            Q.head = Q.tail = -1;
-        } else {
-            Q.info[Q.head] = 0;
-            Q.head++;
-        }
+// unguided 2
+int hitungJumlahNode(address root) {
+    if (root == NULL) {
+        return 0;
     }
+
+    return 1 + hitungJumlahNode(root->right) + hitungJumlahNode(root->left);
+}
+
+int hitungTotalInfo(address root) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    return root->info + hitungTotalInfo(root->right) + hitungTotalInfo(root->left);
+}
+
+int hitungKedalaman(address root, int start) {
+    if (root == NULL) {
+        return start;
+    }
+
+    int left = hitungKedalaman(root->left, start + 1);
+    int right = hitungKedalaman(root->right, start + 1);
+
+    if (left > right) {
+        return left;
+    }
+    return right;
 }
 ```
 
 > output<br>![Screenshot output unguided 2](output/unguided2.png)
 
-Perubahan dari alternatif 1 ke alternatif 2 yang terjadi:
+Penjelasan setiap fungsi:
 
-- `dequeue()`: Function ini mengambil value paling depan pada Queue dan posisi antrian masih tetap, tidak bergeser ke depan. Setelah mengambil value paling depan, maka pointer head akan mundur sebanyak 1 kali dengan `Q.head++`.
+- `hitungJumlahNode()`: Function ini menghitung jumlah node dalam bstree secara rekursif. Jika `root = NULL`, maka `return 0`. Jika tidak, maka function akan return `1 + hitungJumlahNode(root->right) + hitungJumlahNode(root->left)`. Angka `1` menunjukkan node saat ini, lalu function akan menghitung jumlah node pada subtree kanan dan kiri secara rekursif.
+- `hitungTotalInfo()`: Function ini menghitung total value (info) dari seluruh node dalam bstree secara rekursif. Jika `root = NULL`, maka `return 0`. Jika tidak, maka function akan return `root->info + hitungTotalInfo(root->right) + hitungTotalInfo(root->left)`. `root->info` menunjukkan value dari node saat ini, lalu function akan menambahkan value dari subtree kanan dan kiri secara rekursif.
+- `hitungKedalaman()`: Function ini menghitung kedalaman (depth) maksimal dari bstree. Jika `root = NULL`, maka `return start`. Jika tidak, function akan menghitung kedalaman subtree kiri dan kanan secara rekursif dengan menambahkan `start + 1`. Setelah itu, function akan membandingkan kedalaman kiri dan kanan, lalu mengembalikan kedalaman yang lebih besar.
 
 ### Unguided 3
 
@@ -536,3 +581,4 @@ Perubahan dari alternatif 1 ke alternatif 2 yang terjadi:
 7. _GeekForGeeks_. https://www.geeksforgeeks.org/cpp/doubly-linked-list-in-cpp/. Diakses pada 27 Oktober 2025.
 8. _GeekForGeeks_. https://www.geeksforgeeks.org/cpp/stack-in-cpp-stl/. Diakses pada 4 November 2025.
 9. _W3schools_. https://www.w3schools.com/cpp/cpp_queues.asp. Diakses pada 14 November 2025.
+10. _GeeksForGeeks_. https://www.geeksforgeeks.org/cpp/b-tree-implementation-in-cpp/. Diakses pada 6 Desember 2025.
