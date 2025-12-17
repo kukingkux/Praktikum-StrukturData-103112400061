@@ -2,11 +2,11 @@
 #include "multilist.h"
 using namespace std;
 
-bool listEmpty(listinduk L) {
+bool ListEmpty(listinduk L) {
     return (L.first == Nil && L.last == Nil);
 }
 
-bool listEmptyAnak(listanak L) {
+bool ListEmptyAnak(listanak L) {
     return (L.first == Nil && L.last == Nil);
 }
 
@@ -106,7 +106,7 @@ address_anak findBeforeAnak(listanak Lanak, infotypeinduk X, address_anak P) {
 }
 
 void insertFirst(listinduk &L, address P) {
-    if (listEmpty(L)) {
+    if (ListEmpty(L)) {
         L.first = P;
         L.last = P;
     } else {
@@ -129,7 +129,7 @@ void insertAfter(listinduk &L, address P, address Prec) {
 }
 
 void insertLast(listinduk &L, address P) {
-    if (listEmpty(L)) {
+    if (ListEmpty(L)) {
         L.first = P;
         L.last = P;
     } else {
@@ -140,7 +140,7 @@ void insertLast(listinduk &L, address P) {
 }
 
 void insertFirstAnak(listanak &L, address_anak P) {
-    if (listEmptyAnak(L)) {
+    if (ListEmptyAnak(L)) {
         L.first = P;
         L.last = P;
     } else {
@@ -163,7 +163,7 @@ void insertAfterAnak(listanak &L, address_anak P, address_anak Prec) {
 }
 
 void insertLastAnak(listanak &L, address_anak P) {
-    if (listEmptyAnak(L)) {
+    if (ListEmptyAnak(L)) {
         L.first = P;
         L.last = P;
     } else {
@@ -174,7 +174,7 @@ void insertLastAnak(listanak &L, address_anak P) {
 }
 
 void delFirst(listinduk &L, address &P) {
-    if (!listEmpty(L)) {
+    if (!ListEmpty(L)) {
         P = L.first;
         if (L.first == L.last) {
             L.first = Nil;
@@ -188,7 +188,7 @@ void delFirst(listinduk &L, address &P) {
 }
 
 void delLast(listinduk &L, address &P) {
-    if (!listEmpty(L)) {
+    if (!ListEmpty(L)) {
         P = L.last;
         if (L.first == L.last) {
             L.first = Nil;
@@ -228,7 +228,7 @@ void delP (listinduk &L, infotypeinduk X) {
 }
 
 void delFirstAnak(listanak &L, address_anak &P) {
-    if (!listEmptyAnak(L)) {
+    if (!ListEmptyAnak(L)) {
         P = L.first;
         if (L.first == L.last) {
             L.first = Nil;
@@ -242,7 +242,7 @@ void delFirstAnak(listanak &L, address_anak &P) {
 }
 
 void delLastAnak(listanak &L, address_anak &P) {
-    if (!listEmptyAnak(L)) {
+    if (!ListEmptyAnak(L)) {
         P = L.last;
         if (L.first == L.last) {
             L.first = Nil;
@@ -319,14 +319,8 @@ int nbListAnak(listanak Lanak) {
 
 void delAll(listinduk &L) {
     address P;
-    while (!listEmpty(L)) {
+    while (!ListEmpty(L)) {
         delFirst(L, P);
         dealokasi(P);
     }
-}
-
-int main() {
-    // This main function is just a placeholder.
-    // The actual implementation would go here.
-    return 0;
 }
