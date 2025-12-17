@@ -37,11 +37,11 @@ address_anak alokasiAnak(infotypeanak P) {
     return newNode;
 }
 
-void dealokasi(address &P) {
+void dealokasi(address P) {
     delete P;
 }
 
-void dealokasiAnak(address_anak &P) {
+void dealokasiAnak(address_anak P) {
     delete P;
 }
 
@@ -282,23 +282,47 @@ void delPAnak (listanak &L, infotypeanak X) {
 }
 
 void printInfo(listinduk L) {
-
+    address P = L.first;
+    while (P != Nil) {
+        cout << P->info << " ";
+        P = P->next;
+    }
 }
 
 int nbList(listinduk L) {
-
+    int count = 0;
+    address P = L.first;
+    while (P != Nil) {
+        count++;
+        P = P->next;
+    }
+    return count;
 }
 
 void printInfoAnak(listanak Lanak) {
-
+    address_anak P = Lanak.first;
+    while (P != Nil) {
+        cout << P->info << " ";
+        P = P->next;
+    }
 }
 
 int nbListAnak(listanak Lanak) {
-
+    int count = 0;
+    address_anak P = Lanak.first;
+    while (P != Nil) {
+        count++;
+        P = P->next;
+    }
+    return count;
 }
 
 void delAll(listinduk &L) {
-    
+    address P;
+    while (!listEmpty(L)) {
+        delFirst(L, P);
+        dealokasi(P);
+    }
 }
 
 int main() {
