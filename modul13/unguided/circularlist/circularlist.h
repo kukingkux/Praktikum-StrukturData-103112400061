@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-typedef struct elmList *address;
+typedef struct ElmList *address;
 
 struct infotype {
     string Nama;
