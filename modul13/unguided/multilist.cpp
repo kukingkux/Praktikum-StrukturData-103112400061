@@ -106,35 +106,99 @@ address_anak findBeforeAnak(listanak Lanak, infotypeinduk X, address_anak P) {
 }
 
 void insertFirst(listinduk &L, address P) {
-
+    if (listEmpty(L)) {
+        L.first = P;
+        L.last = P;
+    } else {
+        P->next = L.first;
+        L.first->prev = P;
+        L.first = P;
+    }
 }
 
 void insertAfter(listinduk &L, address P, address Prec) {
-
+    if (Prec != Nil) {
+        P->next = Prec->next;
+        P->prev = Prec;
+        if (Prec->next != Nil) {
+            Prec->next->prev = P;
+        } else {
+            L.last = P;
+        }
+    }
 }
 
 void insertLast(listinduk &L, address P) {
-
+    if (listEmpty(L)) {
+        L.first = P;
+        L.last = P;
+    } else {
+        P->prev = L.last;
+        L.last->next = P;
+        L.last = P;
+    }
 }
 
 void insertFirstAnak(listanak &L, address_anak P) {
-
+    if (listEmptyAnak(L)) {
+        L.first = P;
+        L.last = P;
+    } else {
+        P->next = L.first;
+        L.first->prev = P;
+        L.first = P;
+    }
 }
 
 void insertAfterAnak(listanak &L, address_anak P, address_anak Prec) {
-
+    if (Prec != Nil) {
+        P->next = Prec->next;
+        P->prev = Prec;
+        if (Prec->next != Nil) {
+            Prec->next->prev = P;
+        } else {
+            L.last = P;
+        }
+    }
 }
 
 void insertLastAnak(listanak &L, address_anak P) {
-
+    if (listEmptyAnak(L)) {
+        L.first = P;
+        L.last = P;
+    } else {
+        P->prev = L.last;
+        L.last->next = P;
+        L.last = P;
+    }
 }
 
 void delFirst(listinduk &L, address &P) {
-
+    if (!listEmpty(L)) {
+        P = L.first;
+        if (L.first == L.last) {
+            L.first = Nil;
+            L.last = Nil;
+        } else {
+            L.first = L.first->next;
+            L.first->prev = Nil;
+            P->next = Nil;
+        }
+    }
 }
 
 void delLast(listinduk &L, address &P) {
-
+    if (!listEmpty(L)) {
+        P = L.last;
+        if (L.first == L.last) {
+            L.first = Nil;
+            L.last = Nil;
+        } else {
+            L.last = L.last->prev;
+            L.last->next = Nil;
+            P->prev = Nil;
+        }
+    }
 }
 
 void delAfter(listinduk &L, address &P, address Prec) {
