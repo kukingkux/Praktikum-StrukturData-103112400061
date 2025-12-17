@@ -202,27 +202,83 @@ void delLast(listinduk &L, address &P) {
 }
 
 void delAfter(listinduk &L, address &P, address Prec) {
-
+    if (Prec != Nil && Prec->next != Nil) {
+        P = Prec->next;
+        Prec->next = P->next;
+        if (P->next != Nil) {
+            P->next->prev = Prec;
+        } else {
+            L.last = Prec;
+        }
+    }
 }
 
 void delP (listinduk &L, infotypeinduk X) {
-
+    address P = findElm(L, X);
+    if (P != Nil) {
+        if (P == L.first) {
+            delFirst(L, P);
+        } else if (P == L.last) {
+            delLast(L, P);
+        } else {
+            address before = findBefore(L, P);
+            delAfter(L, P, before);
+        }
+    }
 }
 
 void delFirstAnak(listanak &L, address_anak &P) {
-
+    if (!listEmptyAnak(L)) {
+        P = L.first;
+        if (L.first == L.last) {
+            L.first = Nil;
+            L.last = Nil;
+        } else {
+            L.first = L.first->next;
+            L.first->prev = Nil;
+            P->next = Nil;
+        }
+    }
 }
 
 void delLastAnak(listanak &L, address_anak &P) {
-
+    if (!listEmptyAnak(L)) {
+        P = L.last;
+        if (L.first == L.last) {
+            L.first = Nil;
+            L.last = Nil;
+        } else {
+            L.last = L.last->prev;
+            L.last->next = Nil;
+            P->prev = Nil;
+        }
+    }
 }
 
 void delAfterAnak(listanak &L, address_anak &P, address_anak Prec) {
-
+    if (Prec != Nil && Prec->next != Nil) {
+        P = Prec->next;
+        Prec->next = P->next;
+        if (P->next != Nil) {
+            P->next->prev = Prec;
+        } else {
+            L.last = Prec;
+        }
+    }
 }
 
 void delPAnak (listanak &L, infotypeanak X) {
-
+    address_anak P = findElm(L, X);
+    if (P != Nil) {
+        if (P == L.first) {
+            delFirstAnak(L, P);
+        } else if (P == L.last) {
+            delLastAnak(L, P);
+        } else {
+            address_anak before = findBeforeAnak(L, X, P);
+            delAfterAnak(L, P, before);
+        }
+    }
 }
 
 void printInfo(listinduk L) {
