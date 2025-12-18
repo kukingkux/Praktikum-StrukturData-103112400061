@@ -32,7 +32,7 @@ void insertFirst(List &L, address P) {
     }
 }
 
-void insertAfter(List &L, address P, address Prec) {
+void insertAfter(List &L, address Prec, address P) {
     if (Prec != Nil) {
         P->next = Prec->next;
         Prec->next = P;
@@ -91,4 +91,52 @@ void deleteLast(List &L, address &P) {
             beforeLast->next = L.First;
         }
     }
+}
+
+address findElm(List L, infotype x) {
+    if (L.First == Nil) {
+        return Nil;
+    } else {
+        address P = L.First;
+        do {
+            if (P->info.Nim == x.Nim) {
+                return P;
+            } else {
+                P = P->next;
+            }
+        } while (P != L.First);
+        return Nil;
+    }
+}
+
+void printInfo(List L) {
+    int i = 1;
+    if (L.First == Nil) {
+        cout << "List kosong." << endl;
+    } else {
+        address P = L.First;
+        cout << "No\t| Nama \t| Nim \t| Jenis Kelamin | IPK" << endl;
+        cout << "-----------------------------------------------" << endl;
+        do {
+            cout << i << "\t| " << P->info.Nama << "\t| " << P->info.Nim << "\t| " << P->info.Jenis_kelamin << "\t\t| " << P->info.IPK << endl;
+            P = P->next;
+            i++;
+        } while (P != L.First);
+    }
+}
+
+address CreateData(string nama, string nim, char jenis_kelamin, float ipk) 
+{ 
+    /** 
+    * PR : mengalokasikan sebuah elemen list dengan info dengan info sesuai input 
+    * FS : address P menunjuk elemen dengan info sesuai input 
+    */ 
+    infotype x; 
+    address P; 
+    x.Nama = nama; 
+    x.Nim = nim; 
+    x.Jenis_kelamin = jenis_kelamin; 
+    x.IPK = ipk; 
+    P = alokasi(x); 
+    return P; 
 }

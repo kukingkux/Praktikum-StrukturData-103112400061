@@ -33,6 +33,7 @@ void deleteAfter(List &L, address Prec, address &P);
 void deleteLast(List &L, address &P);
 address findElm(List L, infotype x);
 void printInfo(List L);
+address CreateData(string nama, string nim, char jenis_kelamin, float ipk);
 
 
 #endif
