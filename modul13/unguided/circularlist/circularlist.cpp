@@ -52,3 +52,43 @@ void insertLast(List &L, address P) {
         P->next = L.First;
     }
 }
+
+void deleteFirst(List &L, address &P) {
+    if (L.First != Nil) {
+        P = L.First;
+        if (L.First->next == L.First) {
+            L.First = Nil;
+        } else {
+            address last = L.First;
+            while (last->next != L.First) {
+                last = last->next;
+            }
+            L.First = L.First->next;
+            last->next = L.First;
+        }
+    }
+}
+
+void deleteAfter(List &L, address Prec, address &P) {
+    if (Prec != Nil && Prec->next != L.First) {
+        P = Prec->next;
+        Prec->next = P->next;
+    }
+}
+
+void deleteLast(List &L, address &P) {
+    if (L.First != Nil) {
+        address last = L.First;
+        address beforeLast = Nil;
+        while (last->next != L.First) {
+            beforeLast = last;
+            last = last->next;
+        }
+        P = last;
+        if (beforeLast == Nil) {
+            L.First = Nil;
+        } else {
+            beforeLast->next = L.First;
+        }
+    }
+}
