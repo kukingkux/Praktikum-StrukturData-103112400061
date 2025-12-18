@@ -214,6 +214,64 @@ B-tree adalah self-balancing search tree di mana setiap node dapat memiliki bany
 B-tree dapat diimplementasikan menggunakan sebuah struktur node yang berisi array key dan array pointer ke child. Jumlah key dalam sebuah node selalu satu lebih sedikit dibandingkan jumlah pointer ke child. Diagram berikut merepresentasikan struktur dari sebuah B-tree:
 ![Diagram B-tree](assets/BTree.png)
 
+### 12. **Multi Linked List**
+
+Multi-linked list adalah jenis khusus dari list yang memiliki dua atau lebih urutan key secara logis. Sebelum membahas detail tentang multi-linked list, mari lihat terlebih dahulu apa itu linked list. Linked list adalah struktur data yang tidak memiliki batasan ukuran selama memori heap masih tersedia. Kita telah melihat berbagai jenis linked list, seperti Singly Linked List, Circular Linked List, dan Doubly Linked List. Pada bagian ini, kita akan membahas tentang multi-linked list.
+
+Dalam multi-linked list, setiap node dapat memiliki N buah pointer ke node lainnya. Multi-linked list umumnya digunakan untuk mengorganisasi beberapa urutan (order) dari satu kumpulan elemen.
+
+**Properti Multi-Linked List**
+
+Properti dari multi-linked list adalah sebagai berikut:
+
+- Merupakan list terintegrasi dari struktur-struktur yang saling berhubungan.
+- Semua node terintegrasi menggunakan link berupa pointer.
+- Node-node yang terhubung saling terhubung dengan data yang saling berkaitan.
+- Node mengandung pointer dari satu struktur ke struktur lainnya.
+
+<br>
+
+**Struktur Multi-Linked List**
+
+Struktur dari multi-linked list bergantung pada struktur node-nya. Sebuah node umumnya mengandung dua hal:
+
+- Sebuah list pointer
+- Seluruh data yang relevan
+
+<br>
+
+**Use Case Multi-Linked List**
+
+Beberapa contoh penggunaan multi-linked list adalah:
+
+- Beberapa urutan (order) dari satu set elemen
+- Representasi sparse matrix
+- List di dalam list
+
+### 13. **Circular Linked List**
+
+Circular linked list adalah struktur data di mana node terakhir menunjuk kembali ke node pertama, sehingga membentuk sebuah loop tertutup.
+
+- Struktur: Semua node terhubung membentuk lingkaran, sehingga traversal dapat dilakukan secara terus-menerus tanpa menemui NULL.
+
+- Perbedaan dengan Linked List Biasa: Pada linked list biasa, node terakhir menunjuk ke NULL, sedangkan pada circular linked list, node terakhir menunjuk ke node pertama.
+
+- Penggunaan: Sangat cocok untuk tugas seperti scheduling dan pengelolaan playlist, di mana proses berjalan secara mulus dan berulang.
+
+<br>
+
+**Jenis-Jenis Circular Linked List**
+
+Circular linked list dapat dibuat baik dari singly linked list maupun doubly linked list. Oleh karena itu, circular linked list pada dasarnya terbagi menjadi dua jenis:
+
+1. Circular Singly Linked List
+
+   Pada Circular Singly Linked List, setiap node hanya memiliki satu pointer yang disebut pointer next. Pointer next pada node terakhir menunjuk kembali ke node pertama, sehingga membentuk sebuah lingkaran. Pada jenis linked list ini, traversal hanya dapat dilakukan dalam satu arah.
+
+2. Circular Doubly Linked List
+
+   Pada Circular Doubly Linked List, setiap node memiliki dua pointer, yaitu prev dan next, mirip dengan doubly linked list. Pointer prev menunjuk ke node sebelumnya dan pointer next menunjuk ke node berikutnya. Selain node terakhir yang menyimpan alamat node pertama, node pertama juga menyimpan alamat node terakhir.
+
 ## Guided
 
 Berikut merupakan guided dari Modul 13 - Multi Linked List
@@ -329,6 +387,8 @@ Program ini memperlihatkan struktur _Multi Linked List_ dengan mencetak node par
 Di bawah ini merupakan code untuk pengerjaan unguided soal 2-3.
 
 ### Unguided 2 - Multi Linked List
+
+Perhatikan program 46 _multilist.h_, buat _multilist.cpp_ untuk implementasi semua fungsi pada _multilist.h_. Buat _main.cpp_ untuk pemanggilan fungsi-fungsi tersebut.
 
 `multilist.h`
 
@@ -922,176 +982,421 @@ int main() {
 
 > output<br>![Screenshot output unguided 3](output/unguided_2.png)
 
-Program implementasi _Multi Linked List_ pada C++. Diimplementasikan menggunakan Linked List dan memiliki 3 operasi yaitu _insert_, _find_ & _print_. Terdapat 3 buah file yang terdiri dari 1 file header (`bstree.h`), 1 file ADT (`bstree.cpp`), dan 1 file utama (`main.cpp`).
+Program implementasi _Multi Linked List_ pada C++. Terdapat 3 buah file yang terdiri dari 1 file header (`multilist.h`), 1 file ADT (`multilist.cpp`), dan 1 file utama (`main.cpp`).
 
-1. bstree.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
+1. multilist.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
 
-   - infotype: definisi type **integer**.
+   - infotypeanak: definisi type **integer**.
 
-   - address: definisi type pointer ke struct Node.
+   - infotypeinduk: definisi type **integer**.
 
-   - struct Node: Mendefinisikan infotype sebagai info, dan mendefinsikan dua buah address sebagai left dan right.
+   - address: definisi type pointer ke struct elemen_list_induk.
 
-2. bstree.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
+   - address_anak: definisi type pointer ke struct elemen_list_anak.
 
-   - `alokasi()`: Function untuk mengalokasikan memory untuk node baru dengan value x. Return address dari node baru tersebut.
+   - struct elemen_list_anak: menyimpen elemen anak dan pointer penunjuk ke tetangganya.
 
-   - `insertNode()`: Prosedur untuk input value x ke dalam bstree. Jika root masih NULL, maka node baru akan menjadi root. Jika tidak, maka function ini akan mengecek apakah value x lebih kecil atau lebih besar dari root, lalu memasukkan value x ke dalam subtree kiri atau kanan secara rekursif.
+   - struct listanak: menyimpan list anak itu sendiri.
 
-   - `findNode()`: Function untuk mencari value x dalam bstree. Jika `root = NULL` atau `root->info = x`, maka return root. Jika tidak, maka function akan cek jika `x < root->info`, maka function akan cari value x pada subtree kiri secara rekursif. Jika tidak, maka function akan cari value x pada subtree kanan secara rekursif.
+   - struct elemen_list_induk: menyimpen elemen induk dan pointer penunjuk ke tetangganya serta list anak.
 
-   - `printInOrder()`: Prosedur ini akan print secara InOrder yang mana akan print value dari subtree sebelah kiri, ke tengah, lalu subtree sebelah kanan secara berurutan. Prosedur ini dilakukan secara rekursif.
+   - struct listinduk: menyimpan list induk itu sendiri.
 
-3. `main.cpp`: File utama untuk memanggil function dari `bstree.cpp` untuk menjalankan operasi bstree.
+2. multilist.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
 
-### Unguided 1
+   - `ListEmpty()`: Function untuk mengecek apakah list induk kosong. Return true jika list kosong, Return false jika tidak kosong.
 
-Buatlah ADT _Binary Search_ Tree menggunakan _Linked list_ sebagai berikut di dalam file
-“**bstree.h**”:
+   - `ListEmptyAnak()`: Function untuk mengecek apakah list anak kosong. Return true jika list kosong, Return false jika tidak kosong.
+
+   - `CreateList()`: Prosedur untuk membuat list induk kosong.
+
+   - `CreateListAnak()`: Prosedur untuk membuat list anak kosong.
+
+   - `alokasi()`: Function untuk mengalokasikan memory untuk node baru dengan value P. Return address dari node baru tersebut.
+
+   - `alokasiAnak()`: Function untuk mengalokasikan memory untuk node anak baru dengan value P. Return address dari node anak baru tersebut.
+
+   - `dealokasi()`: Prosedur untuk mengembalikan memori yang digunakan P ke sistem.
+
+   - `dealokasiAnak()`: Prosedur untuk mengembalikan memori yang digunakan P ke sistem.
+
+   - `findElm()`: Function untuk mencari elemen list induk dengan value X. Jika ditemukan, return address elemen tersebut. Jika tidak, return Nil.
+
+   - `fFindElm()`: Function untuk mencari elemen list induk dengan address P. Return true jika ketemu, return false jika tidak ketemu.
+
+   - `fFindElmanak()`: Function untuk mencari elemen list anak dengan address P. Return true jika ketemu, return false jika tidak ketemu.
+
+   - `findBefore()`: Function untuk mengembalikan address elemen sebelum P pada list induk. Jika P berada pada awal list, return Nil.
+
+   - `findBeforeAnak()`: Function untuk mengembalikan address elemen sebelum P pada list anak. Jika P berada pada awal list, return Nil.
+
+   - `insertFirst()`: Prosedur untuk menempatkan elemen dengan address P pada awal list induk.
+
+   - `insertAfter()`: Prosedur untuk menempatkan elemen dengan address P sesudah elemen dengan address Prec pada list induk.
+
+   - `insertLast()`: Prosedur untuk menempatkan elemen dengan address P pada akhir list induk.
+
+   - `insertFirstAnak()`: Prosedur untuk menempatkan elemen dengan address P pada awal list anak.
+
+   - `insertAfterAnak()`: Prosedur untuk menempatkan elemen dengan address P sesudah elemen dengan address Prec pada list anak.
+
+   - `insertLastAnak()`: Prosedur untuk menempatkan elemen dengan address P pada akhir list anak.
+
+   - `delFirst()`: Prosedur untuk menghapus elemen pertama list induk dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first dan last di-set ke Nil.
+
+   - `delLast()`: Prosedur untuk menghapus elemen terakhir list induk dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first dan last di-set ke Nil.
+
+   - `delAfter()`: Prosedur untuk menghapus elemen sesudah Prec pada list induk dan mengembalikan address elemen tersebut ke P.
+
+   - `delP()`: Prosedur untuk menghapus elemen dengan value X pada list induk. Jika ditemukan, elemen tersebut dihapus dan dilakukan dealokasi.
+
+   - `delFirstAnak()`: Prosedur untuk menghapus elemen pertama list anak dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first dan last di-set ke Nil.
+
+   - `delLastAnak()`: Prosedur untuk menghapus elemen terakhir list anak dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first dan last di-set ke Nil.
+
+   - `delAfterAnak()`: Prosedur untuk menghapus elemen sesudah Prec pada list anak dan mengembalikan address elemen tersebut ke P.
+
+   - `delPAnak()`: Prosedur untuk menghapus elemen dengan value X pada list anak. Jika ditemukan, elemen tersebut dihapus dan dilakukan dealokasi.
+
+   - `printInfo()`: Prosedur untuk menampilkan semua info (data) yang ada pada list induk.
+
+   - `nbList()`: Function untuk menghitung jumlah elemen pada list induk. Return jumlah elemen.
+
+   - `printInfoAnak()`: Prosedur untuk menampilkan semua info (data) yang ada pada list anak.
+
+   - `nbListAnak()`: Function untuk menghitung jumlah elemen pada list anak. Return jumlah elemen.
+
+   - `delAll()`: Prosedur untuk menghapus semua elemen pada list induk dan melakukan dealokasi pada setiap elemen.
+
+3. `main.cpp`: File utama untuk memanggil function dari `multilist.cpp` untuk menjalankan dan menggunakan multilist.
+
+---
+
+### Unguided 3
+
+Buatlah ADT _Multi Linked list_ sebagai berikut di dalam file “**circularlist.h**”:
 
 ```
-Type infotype: integer
-Type address : pointer to Node
-Type Node:  <
-info : infotype
-left, right : address
->
-function alokasi( x : infotype ) → address
-procedure insertNode( input/output root : address, input x : infotype )
-function findNode( x : infotype, root : address )→address
-procedure printInorder( input root : address )
+Type infotype : mahasiswa <
+    Nama:string
+    Nim:string
+    Jenis_kelamin:char
+    Ipk:float>
+Type address : pointer to ElmList
+Type ElmList <
+    info : infotype
+    next :address>
+Type List <
+    First : address>
 ```
 
-Buatlah implementasi ADT _Binary Search_ Tree pada _file_ “**bstree.cpp**” dan cobalah hasil
-implementasi ADT pada file “main.cpp”
+- Terdapat 11 fungsi/prosedur untuk ADT circularlist
+  - procedure CreateList( input/output L : List )
+  - function alokasi( x : infotype ) → address
+  - procedure dealokasi( input/output t P : address )
+  - procedure insertFirst( input/output L : List, input P : address )
+  - procedure insertAfter( input/output L : List, input Prec : address, P : address)
+  - procedure insertLast( input/output L : List, input P : address )
+  - procedure deleteFirst( input/output L : List, input/output P : address )
+  - procedure deleteAfter( input/output L : List, input Prec : address,  
+     input/output t P : address )
+  - procedure deleteLast( input/output L : List, P : address )
+  - function findElm( L : List, x : infotype ) → address
+  - procedure printInfo( input L : List )
+
+Buatlah implementasi ADT _Doubly Linked list_ pada _file_ “**circularlist.cpp**”. Tambahkan fungsi/prosedur berikut pada file “**main.cpp**”.
+
+- fungsi create ( in nama, nim : string, jenis_kelamin : char, ipk : float)
+  - fungsi disediakan, ketik ulang code yang diberikan
+  - fungsi mengalokasikan sebuah elemen list dengan info sesuai input
+
+`circularlist.h`
+
+```c++
+#ifndef CIRCULARLIST_H_INCLUDED
+#define CIRCULARLIST_H_INCLUDED
+#define Nil NULL
+#include <string>
+using namespace std;
+
+typedef struct ElmList *address;
+
+struct infotype {
+    string Nama;
+    string Nim;
+    char Jenis_kelamin;
+    float IPK;
+};
+
+struct ElmList {
+    infotype info;
+    address next;
+};
+
+struct List {
+    address First;
+};
+
+void CreateList(List &L);
+address alokasi(infotype x);
+void dealokasi(address P);
+void insertFirst(List &L, address P);
+void insertAfter(List &L, address P, address Prec);
+void insertLast(List &L, address P);
+void deleteFirst(List &L, address &P);
+void deleteAfter(List &L, address Prec, address &P);
+void deleteLast(List &L, address &P);
+address findElm(List L, infotype x);
+void printInfo(List L);
+address CreateData(string nama, string nim, char jenis_kelamin, float ipk);
+
+
+#endif
+```
+
+<br>
+
+`circularlist.cpp`
 
 ```c++
 #include <iostream>
-#include "bstree.h"
-
+#include "circularlist.h"
 using namespace std;
+
+void CreateList(List &L) {
+    L.First = Nil;
+}
+
+address alokasi(infotype x) {
+    address P = new ElmList;
+    P->info = x;
+    P->next = Nil;
+    return P;
+}
+
+void dealokasi (address P) {
+    delete P;
+}
+
+void insertFirst(List &L, address P) {
+    if (L.First == Nil) {
+        L.First = P;
+        P->next = L.First;
+    } else {
+        address last = L.First;
+        while (last->next != L.First) {
+            last = last->next;
+        }
+        P->next = L.First;
+        L.First = P;
+        last->next = L.First;
+    }
+}
+
+void insertAfter(List &L, address Prec, address P) {
+    if (Prec != Nil) {
+        P->next = Prec->next;
+        Prec->next = P;
+    }
+}
+
+void insertLast(List &L, address P) {
+    if (L.First == Nil) {
+        L.First = P;
+        P->next = L.First;
+    } else {
+        address last = L.First;
+        while (last->next != L.First) {
+            last = last->next;
+        }
+        last->next = P;
+        P->next = L.First;
+    }
+}
+
+void deleteFirst(List &L, address &P) {
+    if (L.First != Nil) {
+        P = L.First;
+        if (L.First->next == L.First) {
+            L.First = Nil;
+        } else {
+            address last = L.First;
+            while (last->next != L.First) {
+                last = last->next;
+            }
+            L.First = L.First->next;
+            last->next = L.First;
+        }
+    }
+}
+
+void deleteAfter(List &L, address Prec, address &P) {
+    if (Prec != Nil && Prec->next != L.First) {
+        P = Prec->next;
+        Prec->next = P->next;
+    }
+}
+
+void deleteLast(List &L, address &P) {
+    if (L.First != Nil) {
+        address last = L.First;
+        address beforeLast = Nil;
+        while (last->next != L.First) {
+            beforeLast = last;
+            last = last->next;
+        }
+        P = last;
+        if (beforeLast == Nil) {
+            L.First = Nil;
+        } else {
+            beforeLast->next = L.First;
+        }
+    }
+}
+
+address findElm(List L, infotype x) {
+    if (L.First == Nil) {
+        return Nil;
+    } else {
+        address P = L.First;
+        do {
+            if (P->info.Nim == x.Nim) {
+                return P;
+            } else {
+                P = P->next;
+            }
+        } while (P != L.First);
+        return Nil;
+    }
+}
+
+void printInfo(List L) {
+    int i = 1;
+    if (L.First == Nil) {
+        cout << "List kosong." << endl;
+    } else {
+        address P = L.First;
+        cout << "No\t| Nama \t| Nim \t| Jenis Kelamin | IPK" << endl;
+        cout << "-----------------------------------------------" << endl;
+        do {
+            cout << i << "\t| " << P->info.Nama << "\t| " << P->info.Nim << "\t| " << P->info.Jenis_kelamin << "\t\t| " << P->info.IPK << endl;
+            P = P->next;
+            i++;
+        } while (P != L.First);
+    }
+}
+
+address CreateData(string nama, string nim, char jenis_kelamin, float ipk)
+{
+    /**
+    * PR : mengalokasikan sebuah elemen list dengan info dengan info sesuai input
+    * FS : address P menunjuk elemen dengan info sesuai input
+    */
+    infotype x;
+    address P;
+    x.Nama = nama;
+    x.Nim = nim;
+    x.Jenis_kelamin = jenis_kelamin;
+    x.IPK = ipk;
+    P = alokasi(x);
+    return P;
+}
+```
+
+<br>
+
+`main.cpp`
+
+```c++
+#include <iostream>
+#include "circularlist.h"
+#include "circularlist.cpp"
+using namespace std;
+
 int main() {
-    cout << "Hello World" << endl;
-    address root = Nil;
-    insertNode(root,1);
-    insertNode(root,2);
-    insertNode(root,6);
-    insertNode(root,4);
-    insertNode(root,5);
-    insertNode(root,3);
-    insertNode(root,6);
-    insertNode(root,7);
-    InOrder(root);
+    List L, A, B, L2;
+
+    address P1 = Nil;
+    address P2 = Nil;
+    infotype x;
+
+    CreateList(L);
+
+    cout<<"coba insert first, last, dan after"<<endl;
+    P1 = CreateData("Danu", "04", 'l', 4.0);
+    insertFirst(L,P1);
+    P1 = CreateData("Fahmi", "06", 'l',3.45);
+    insertLast(L,P1);
+    P1 = CreateData("Bobi", "02", 'l',3.71);
+    insertFirst(L,P1);
+
+    P1 = CreateData("Ali", "01", 'l', 3.3);
+    insertFirst(L,P1);
+
+    P1 = CreateData("Gita", "07", 'p', 3.75);
+    insertLast(L,P1);
+
+    x.Nim = "07";
+    P1 = findElm(L,x);
+    P2 = CreateData("Cindi", "03", 'p', 3.5);
+    insertAfter(L, P1, P2);
+
+    x.Nim = "02";
+    P1 = findElm(L,x);
+    P2 = CreateData("Hilmi", "08", 'p', 3.3);
+    insertAfter(L, P1, P2);
+
+    x.Nim = "04";
+    P1 = findElm(L,x);
+    P2 = CreateData("Eli", "05", 'p', 3.4);
+    insertAfter(L, P1, P2);
+
+    printInfo(L);
     return 0;
 }
 ```
 
-> output<br>![Screenshot output unguided 1](output/unguided1.png)
+> output<br>![Screenshot output unguided 1](output/unguided_3.png)
 
-Program implementasi bstree pada C++. Diimplementasikan menggunakan Linked List dan memiliki 3 operasi yaitu _insert_, _find_ & _print_. Terdapat 3 buah file yang terdiri dari 1 file header (`bstree.h`), 1 file ADT (`bstree.cpp`), dan 1 file utama (`main.cpp`).
+Program implementasi _Circular List_ pada C++. Diimplementasikan menggunakan _Doubly Linked List_ dan memiliki 3 operasi yaitu _insert_, _find_ & _delete_. Terdapat 3 buah file yang terdiri dari 1 file header (`circularlist.h`), 1 file ADT (`circularlist.cpp`), dan 1 file utama (`main.cpp`).
 
-1. bstree.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
+1. circularlist.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
 
-   - infotype: definisi type **integer**.
+   - address: definisi type pointer ke struct ElmList.
 
-   - address: definisi type pointer ke struct Node.
+   - struct infotype: mendefinisikan tipe data untuk menyimpan informasi mahasiswa yang terdiri dari Nama, Nim, Jenis_kelamin, dan Ipk.
 
-   - struct Node: Mendefinisikan infotype sebagai info, dan mendefinsikan dua buah address sebagai left dan right.
+   - struct ElmList: menyimpan elemen list dan pointer ke elemen selanjutnya.
 
-2. bstree.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
+   - struct List: menyimpan list itu sendiri dengan pointer ke elemen pertama.
+
+2. circularlist.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
+
+   - `CreateList()`: Prosedur untuk membuat list kosong.
 
    - `alokasi()`: Function untuk mengalokasikan memory untuk node baru dengan value x. Return address dari node baru tersebut.
 
-   - `insertNode()`: Prosedur untuk input value x ke dalam bstree. Jika root masih NULL, maka node baru akan menjadi root. Jika tidak, maka function ini akan mengecek apakah value x lebih kecil atau lebih besar dari root, lalu memasukkan value x ke dalam subtree kiri atau kanan secara rekursif.
+   - `dealokasi()`: Prosedur untuk mengembalikan memori yang digunakan P ke sistem.
 
-   - `findNode()`: Function untuk mencari value x dalam bstree. Jika `root = NULL` atau `root->info = x`, maka return root. Jika tidak, maka function akan cek jika `x < root->info`, maka function akan cari value x pada subtree kiri secara rekursif. Jika tidak, maka function akan cari value x pada subtree kanan secara rekursif.
+   - `insertFirst()`: Prosedur untuk menempatkan elemen dengan address P pada awal list.
 
-   - `printInOrder()`: Prosedur ini akan print secara InOrder yang mana akan print value dari subtree sebelah kiri, ke tengah, lalu subtree sebelah kanan secara berurutan. Prosedur ini dilakukan secara rekursif.
+   - `insertAfter()`: Prosedur untuk menempatkan elemen dengan address P sesudah elemen dengan address Prec.
 
-3. `main.cpp`: File utama untuk memanggil function dari `bstree.cpp` untuk menjalankan operasi bstree.
+   - `insertLast()`: Prosedur untuk menempatkan elemen dengan address P pada akhir list. Cek apakah list kosong atau tidak untuk mengatur pointer next dari elemen terakhir.
 
-### Unguided 2
+   - `deleteFirst()`: Prosedur untuk menghapus elemen pertama list dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first di-set ke Nil.
 
-Buatlah fungsi untuk menghitung jumlah node dengan fungsi berikut.
+   - `deleteAfter()`: Prosedur untuk menghapus elemen sesudah Prec dan mengembalikan address elemen tersebut ke P.
 
-- fungsi hitungJumlahNode( root:address ) : integer
-  /_ fungsi mengembalikan integer banyak node yang ada di dalam BST_/
+   - `deleteLast()`: Prosedur untuk menghapus elemen terakhir list dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first di-set ke Nil.
 
-- fungsi hitungTotalInfo( root:address, start:integer ) : integer
-  /_ fungsi mengembalikan jumlah (total) info dari node-node yang ada di dalam BST_/
+   - `findElm()`: Function untuk mencari elemen list dengan value x. Jika ditemukan, return address elemen tersebut. Jika tidak, return Nil.
 
-- fungsi hitungKedalaman( root:address, start:integer ) : integer
-  /_ fungsi rekursif mengembalikan integer kedalaman maksimal dari binary tree _/
+   - `printInfo()`: Prosedur untuk menampilkan semua info (data) yang ada pada list.
 
-```c++
-// unguided 2
-int hitungJumlahNode(address root) {
-    if (root == NULL) {
-        return 0;
-    }
+   - `CreateData()`: Function untuk mengalokasikan sebuah elemen list dengan info sesuai input. Return address dari elemen tersebut.
 
-    return 1 + hitungJumlahNode(root->right) + hitungJumlahNode(root->left);
-}
-
-int hitungTotalInfo(address root) {
-    if (root == NULL) {
-        return 0;
-    }
-
-    return root->info + hitungTotalInfo(root->right) + hitungTotalInfo(root->left);
-}
-
-int hitungKedalaman(address root, int start) {
-    if (root == NULL) {
-        return start;
-    }
-
-    int left = hitungKedalaman(root->left, start + 1);
-    int right = hitungKedalaman(root->right, start + 1);
-
-    if (left > right) {
-        return left;
-    }
-    return right;
-}
-```
-
-> output<br>![Screenshot output unguided 2](output/unguided2.png)
-
-Penjelasan setiap fungsi:
-
-- `hitungJumlahNode()`: Function ini menghitung jumlah node dalam bstree secara rekursif. Jika `root = NULL`, maka `return 0`. Jika tidak, maka function akan return `1 + hitungJumlahNode(root->right) + hitungJumlahNode(root->left)`. Angka `1` menunjukkan node saat ini, lalu function akan menghitung jumlah node pada subtree kanan dan kiri secara rekursif.
-- `hitungTotalInfo()`: Function ini menghitung total value (info) dari seluruh node dalam bstree secara rekursif. Jika `root = NULL`, maka `return 0`. Jika tidak, maka function akan return `root->info + hitungTotalInfo(root->right) + hitungTotalInfo(root->left)`. `root->info` menunjukkan value dari node saat ini, lalu function akan menambahkan value dari subtree kanan dan kiri secara rekursif.
-- `hitungKedalaman()`: Function ini menghitung kedalaman (depth) maksimal dari bstree. Jika `root = NULL`, maka `return start`. Jika tidak, function akan menghitung kedalaman subtree kiri dan kanan secara rekursif dengan menambahkan `start + 1`. Setelah itu, function akan membandingkan kedalaman kiri dan kanan, lalu mengembalikan kedalaman yang lebih besar.
-
-### Unguided 3
-
-Print tree secara pre-order dan post-order.
-
-```c++
-void printPreOrder(address root) {
-    if (root != NULL) {
-        cout << root->info << " - ";
-        printPreOrder(root->left);
-        printPreOrder(root->right);
-    }
-}
-
-void printPostOrder(address root) {
-    if (root != NULL) {
-        printPostOrder(root->left);
-        printPostOrder(root->right);
-        cout << root->info << " - ";
-    }
-}
-```
-
-> output<br>![Screenshot output unguided 3](output/unguided3.png)
-
-Penjelasan setiap fungsi:
-
-- `printPreOrder()`: Prosedur ini akan print value secara PreOrder yang mana akan print value dari tengah, ke subtree sebelah kiri, lalu subtree sebelah kanan secara berurutan. Prosedur ini dilakukan secara rekursif.
-- `printPostOrder()`: Prosedur ini akan print value secara PostOrder yang mana akan print value dari subtree sebelah kiri, ke subtree sebelah kanan, lalu ke tengah secara berurutan. Prosedur ini dilakukan secara rekursif.
+3. `main.cpp`: File utama untuk memanggil function dari `circularlist.cpp` untuk menjalankan operasi Circular List.
 
 ## Referensi
 
@@ -1105,3 +1410,5 @@ Penjelasan setiap fungsi:
 8. _GeekForGeeks_. https://www.geeksforgeeks.org/cpp/stack-in-cpp-stl/. Diakses pada 4 November 2025.
 9. _W3schools_. https://www.w3schools.com/cpp/cpp_queues.asp. Diakses pada 14 November 2025.
 10. _GeeksForGeeks_. https://www.geeksforgeeks.org/cpp/b-tree-implementation-in-cpp/. Diakses pada 6 Desember 2025.
+11. _GeeksForGeeks_. https://www.geeksforgeeks.org/dsa/circular-linked-list/. Diakses pada 18 Desember 2025.
+12. _GeekForGeeks_. https://www.geeksforgeeks.org/dsa/introduction-to-multi-linked-list/. Diakses 18 Desember 2025.
