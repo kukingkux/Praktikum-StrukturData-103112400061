@@ -836,7 +836,7 @@ Program implementasi _Graph_ pada C++. Terdapat 3 buah file yang terdiri dari 1 
 
 ---
 
-### Unguided 3 - BFS
+### Unguided 2 - DFS
 
 Buatlah prosedur untuk menampilkanhasil penelusuran DFS.
 
@@ -917,7 +917,7 @@ Perubahan yang dilakukan pada file `graph.h`, `graph.cpp`, dan `main.cpp` untuk 
 
 ---
 
-### Unguided 2 - DFS
+### Unguided 3 - BFS
 
 Buatlah prosedur untuk menampilkanhasil penelusuran DFS.
 
