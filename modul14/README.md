@@ -1,4 +1,4 @@
-# <h1 align="center">Laporan Praktikum Modul 13 <br>MULTI LINKED LIST</h1>
+# <h1 align="center">Laporan Praktikum Modul 14 <br>GRAPH</h1>
 
 <p align="center">KEISHIN NAUFA ALFARIDZHI - 103112400061</p>
 
@@ -272,106 +272,323 @@ Circular linked list dapat dibuat baik dari singly linked list maupun doubly lin
 
    Pada Circular Doubly Linked List, setiap node memiliki dua pointer, yaitu prev dan next, mirip dengan doubly linked list. Pointer prev menunjuk ke node sebelumnya dan pointer next menunjuk ke node berikutnya. Selain node terakhir yang menyimpan alamat node pertama, node pertama juga menyimpan alamat node terakhir.
 
+### 14. **Graph**
+
+Graph adalah struktur data yang merupakan kombinasi dari node dan edge. Node/vertex menyimpan data atau entitas, sedangkan edge merupakan koneksi antara dua node.
+
+**Jenis-Jenis Graph**
+
+1. Directed dan Undirected Graph
+
+   Pada sebuah graph, jika semua edge memiliki arah dari satu node ke node lainnya, maka graph tersebut disebut Directed Graph. Sebaliknya, jika edge hanya berupa garis sederhana tanpa arah antara dua node, maka graph tersebut disebut Undirected Graph.
+
+2. Weighted Graph
+
+   Weighted Graph adalah graph di mana setiap edge memiliki weight (nilai yang merepresentasikan hubungan antara dua node yang dihubungkan oleh edge tersebut).
+
+3. Cyclic dan Acyclic Graph
+
+   Pada Directed Graph, jika terdapat kemungkinan terbentuknya sebuah path di mana saat traversal kita kembali ke node yang sudah pernah dilewati, maka graph tersebut disebut Cyclic Graph. Sebaliknya, jika tidak ada kemungkinan seperti itu, maka graph tersebut disebut Acyclic Graph.
+
+<br>
+
+**Beberapa Istilah**
+
+1. Degree (pada Undirected Graph)
+
+   Degree menunjukkan berapa banyak edge yang terhubung ke sebuah node pada Undirected Graph.
+
+2. InDegree dan OutDegree (Directed Graph)
+
+   InDegree menunjukkan jumlah edge yang masuk ke sebuah node pada Directed Graph. Sementara itu, OutDegree menunjukkan jumlah edge yang keluar dari sebuah node pada Directed Graph.
+
+<br>
+
+**Graph Traversal**
+
+1. **Breadth First Search (BFS)**
+
+   Breadth First Search adalah algoritma pencarian yang digunakan pada struktur data tree atau graph untuk mencari node dengan properti tertentu. Algoritma ini dimulai dari root node dan, saat bergerak ke level yang lebih dalam, data node dicatat secara bertahap. Hal ini berbeda dengan algoritma DFS yang menelusuri hingga node terdalam terlebih dahulu, kemudian mencatat data node.
+
+   Struktur data yang dibutuhkan untuk menjalankan algoritma BFS adalah:
+
+- Queue (untuk menyimpan child node atau node yang terhubung dan masih perlu dieksplorasi)
+- Unordered map atau vector (untuk mengecek apakah sebuah node sudah dikunjungi atau belum)
+
+    <br>
+    
+    **Langkah-langkah algoritma**:
+
+- Tandai node pertama yang diterima dalam function sebagai visited.
+- Tambahkan node tersebut ke dalam queue.
+- Ambil node terdepan dari queue dan simpan dalam sebuah variabel.
+- Hapus node tersebut dari queue.
+- Masukkan node tersebut ke dalam answer vector.
+- Tambahkan neighbor node-nya ke dalam queue.
+
+<br>
+
+2. **Depth First Search (DFS)**
+   First Search adalah algoritma pencarian atau traversal yang digunakan untuk menelusuri tree atau graph. Algoritma ini dimulai dari root node yang diberikan, lalu melakukan traversal atau pengecekan elemen dengan bergerak lebih dalam ke dalam tree atau graph.
+
+   data yang dibutuhkan untuk menjalankan algoritma DFS adalah:
+   Unordered map atau vector (untuk mengecek apakah sebuah node sudah dikunjungi atau belum)
+
+   <br>
+
+   **Langkah-langkah algoritma**:
+
+- Tandai node pertama yang diterima sebagai visited.
+- Tambahkan node tersebut ke dalam answer vector.
+- Lakukan looping pada adjacency list; jika sebuah node belum visited, panggil function DFS secara rekursif.
+
 ## Guided
 
-Berikut merupakan guided dari Modul 13 - Multi Linked List
+Berikut merupakan guided dari Modul 14 - Graph
 
-`guided1.cpp`
+`graf.h`
 
 ```c++
+#ifndef GRAF_H_INCLUDED
+#define GRAF_H_INCLUDED
+
 #include <iostream>
-#include <string>
 using namespace std;
 
-struct ChildNode {
-    string info;
-    ChildNode *next;
+typedef char infoGraph;
+
+struct ElmNode;
+struct ElmEdge;
+
+typedef ElmNode *adrNode;
+typedef ElmEdge *adrEdge;
+
+struct ElmNode
+{
+    infoGraph info;
+    int visited;
+    adrEdge firstEdge;
+    adrNode next;
 };
 
-struct ParentNode {
-    string info;
-    ChildNode *childHead;
-    ParentNode *next;
+struct ElmEdge
+{
+    adrNode node;
+    adrEdge next;
 };
 
-ParentNode *createParent(string info) {
-    ParentNode *newNode = new ParentNode;
-    newNode->info = info;
-    newNode->childHead = NULL;
-    newNode->next = NULL;
-    return newNode;
+struct Graph
+{
+    adrNode first;
+};
+
+// PRIMITIF GRAPH
+void CreateGraph(Graph &G);
+adrNode AllocateNode(infoGraph X);
+adrEdge AllocateEdge(adrNode N);
+
+void InsertNode(Graph &G, infoGraph X);
+adrNode FindNode(Graph G, infoGraph X);
+
+void ConnectNode(Graph &G, infoGraph A, infoGraph B);
+
+void PrintInfoGraph(Graph G);
+
+// Traversal
+void ResetVisited(Graph &G);
+void PrintDFS(Graph &G, adrNode N);
+void PrintBFS(Graph &G, adrNode N);
+
+#endif
+```
+
+`graf.cpp`
+
+```c++
+#include "graf.h"
+#include <queue>
+#include <stack>
+
+void CreateGraph(Graph &G)
+{
+    G.first = NULL;
 }
 
-ChildNode *createChild(string info) {
-    ChildNode *newNode = new ChildNode;
-    newNode->info = info;
-    newNode->next = NULL;
-    return newNode;
+adrNode AllocateNode(infoGraph X)
+{
+    adrNode P = new ElmNode;
+    P->info = X;
+    P->visited = 0;
+    P->firstEdge = NULL;
+    P->next = NULL;
+    return P;
 }
 
-void insertParent(ParentNode *&head, string info) {
-    ParentNode *newNode = createParent(info);
-    if (head == NULL) {
-        head = newNode;
-    } else {
-        ParentNode *temp = head;
-        while(temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
+adrEdge AllocateEdge(adrNode N)
+{
+    adrEdge P = new ElmEdge;
+    P->node = N;
+    P->next = NULL;
+    return P;
+}
+
+void InsertNode(Graph &G, infoGraph X)
+{
+    adrNode P = AllocateNode(X);
+    P->next = G.first;
+    G.first = P;
+}
+
+adrNode FindNode(Graph G, infoGraph X)
+{
+    adrNode P = G.first;
+    while (P != NULL)
+    {
+        if (P->info == X)
+            return P;
+        P = P->next;
     }
+    return NULL;
 }
 
-void insertChild(ParentNode *head, string parentInfo, string childInfo) {
-    ParentNode *p = head;
-    while(p != NULL && p->info != parentInfo) {
-        p = p->next;
+void ConnectNode(Graph &G, infoGraph A, infoGraph B)
+{
+    adrNode N1 = FindNode(G, A);
+    adrNode N2 = FindNode(G, B);
+
+    if (N1 == NULL || N2 == NULL)
+    {
+        cout << "Node tidak ditemukan!\n";
+        return;
     }
 
-    if (p != NULL) {
-        ChildNode *newChild = createChild(childInfo);
-        if (p->childHead == NULL) {
-            p->childHead = newChild;
-        } else {
-            ChildNode *c = p->childHead;
-            while(c->next != NULL) {
-                c = c->next;
-            }
-            c->next = newChild;
-        }
-    }
+    // Buat edge dari N1 ke N2
+    adrEdge E1 = AllocateEdge(N2);
+    E1->next = N1->firstEdge;
+    N1->firstEdge = E1;
+
+    // Karena undirected → buat edge balik
+    adrEdge E2 = AllocateEdge(N1);
+    E2->next = N2->firstEdge;
+    N2->firstEdge = E2;
 }
 
-void printAll(ParentNode *head) {
-    ParentNode *p = head;
-    while(p != NULL) {
-        cout << p->info;
-        ChildNode *c = p->childHead;
-        if (c != NULL) {
-            while(c != NULL) {
-                cout << " -> " << c->info;
-                c = c->next;
-            }
+void PrintInfoGraph(Graph G)
+{
+    adrNode P = G.first;
+    while (P != NULL)
+    {
+        cout << P->info << " -> ";
+        adrEdge E = P->firstEdge;
+        while (E != NULL)
+        {
+            cout << E->node->info << " ";
+            E = E->next;
         }
         cout << endl;
-        p = p->next;
+        P = P->next;
     }
 }
 
-int main() {
-    ParentNode *list = NULL;
-    insertParent(list, "Parent Node 1");
-    insertParent(list, "Parent Node 2");
+void ResetVisited(Graph &G)
+{
+    adrNode P = G.first;
+    while (P != NULL)
+    {
+        P->visited = 0;
+        P = P->next;
+    }
+}
 
-    printAll(list);
-    cout << "\n";
+void PrintDFS(Graph &G, adrNode N)
+{
+    if (N == NULL)
+        return;
 
-    insertChild(list, "Parent Node 1", "Child Node A");
-    insertChild(list, "Parent Node 1", "Child Node B");
-    insertChild(list, "Parent Node 2", "Child Node C");
+    N->visited = 1;
+    cout << N->info << " ";
 
-    printAll(list);
+    adrEdge E = N->firstEdge;
+    while (E != NULL)
+    {
+        if (E->node->visited == 0)
+        {
+            PrintDFS(G, E->node);
+        }
+        E = E->next;
+    }
+}
 
+void PrintBFS(Graph &G, adrNode N)
+{
+    if (N == NULL)
+        return;
+
+    queue<adrNode> Q;
+    Q.push(N);
+
+    while (!Q.empty())
+    {
+        adrNode curr = Q.front();
+        Q.pop();
+
+        if (curr->visited == 0)
+        {
+            curr->visited = 1;
+            cout << curr->info << " ";
+
+            adrEdge E = curr->firstEdge;
+            while (E != NULL)
+            {
+                if (E->node->visited == 0)
+                {
+                    Q.push(E->node);
+                }
+                E = E->next;
+            }
+        }
+    }
+}
+```
+
+`main.cpp`
+
+```c++
+#include "graf.h"
+#include "graf.cpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    Graph G;
+    CreateGraph(G);
+
+    // Tambah node
+    InsertNode(G, 'A');
+    InsertNode(G, 'B');
+    InsertNode(G, 'C');
+    InsertNode(G, 'D');
+    InsertNode(G, 'E');
+
+    // Hubungkan node (graph tidak berarah)
+    ConnectNode(G, 'A', 'B');
+    ConnectNode(G, 'A', 'C');
+    ConnectNode(G, 'B', 'D');
+    ConnectNode(G, 'C', 'E');
+
+    cout << "=== Struktur Graph ===\n";
+    PrintInfoGraph(G);
+
+    cout << "\n=== DFS dari Node A ===\n";
+    ResetVisited(G);
+    PrintDFS(G, FindNode(G, 'A'));
+
+    cout << "\n\n=== BFS dari Node A ===\n";
+    ResetVisited(G);
+    PrintBFS(G, FindNode(G, 'A'));
+
+    cout << endl;
     return 0;
 }
 ```
@@ -380,558 +597,151 @@ int main() {
 
 ### Penjelasan:
 
-Program ini memperlihatkan struktur _Multi Linked List_ dengan mencetak node parent dengan nama `Parent Node` beserta dengan node anak dengan nama `Child Node`.
+Program ini mengimplementasikan struktur data graph menggunakan linked list di C++. Program ini memungkinkan pembuatan graph, penambahan node, penghubungan node, serta traversal graph menggunakan algoritma DFS (Depth First Search) dan BFS (Breadth First Search).
 
 ## Unguided
 
-Di bawah ini merupakan code untuk pengerjaan unguided soal 2-3.
+Di bawah ini merupakan code untuk pengerjaan unguided soal 1-3.
 
-### Unguided 2 - Multi Linked List
+### Unguided 1 - Graph Tidak Berarah
 
-Perhatikan program 46 _multilist.h_, buat _multilist.cpp_ untuk implementasi semua fungsi pada _multilist.h_. Buat _main.cpp_ untuk pemanggilan fungsi-fungsi tersebut.
+Buatlah ADT Graph tidak berarah file “graph.h”:
 
-`multilist.h`
+```
+Type infoGraph: char
+Type adrNode : pointer to ElmNode
+Type adrEdge : pointer to ElmNode
+Type ElmNode  <
+    info : infoGraph
+    visited : integer
+    firstEdge : adrEdge
+    Next : adrNode
+>
+Type ElmEdge  <
+    Node : adrNode
+    Next : adrEdge
+>
+    Type Graph  <
+    first : adrNode
+>
+procedure CreateGraph (input/output G : Graph)
+procedure InsertNode (input/output G : Graph,
+    input X : infotype)
+procedure ConnectNode (input/output N1, N2 : adrNode)
+procedure PrintInfoGraph (input G : Graph)
+```
+
+Buatlah implementasi ADT Graph pada file “graph.cpp” dan cobalah hasil implementasi ADT
+pada file “main.cpp”.
+
+`graph.h`
 
 ```c++
-/*file : multilist .h*/
-/* contoh ADT list berkait dengan representasi fisik pointer*/
-/* representasi address dengan pointer*/
-
-/* info tipe adalah integer */
-#ifndef MULTILIST_H_INCLUDED
-#define MULTILIST_H_INCLUDED
+#ifndef GRAPH_H_INCLUDED
+#define GRAPH_H_INCLUDED
 #define Nil NULL
+#include <queue>
+#include <stack>
+#include <iostream>
 
-typedef int infotypeanak;
-typedef int infotypeinduk;
-typedef struct elemen_list_induk *address;
-typedef struct elemen_list_anak *address_anak;
-/* define list : */
+typedef char infoGraph;
+typedef struct ElmNode *adrNode;
+typedef struct ElmEdge *adrEdge;
 
-/* list kosong jika L.first=Nil
-setiap elemen address P dapat diacu P→info atau P→next
-elemen terakhir list jika addressnya last, maka L.last = Nil */
-struct elemen_list_anak{
-    /* struct ini untuk menyimpan elemen anak dan pointer penunjuk
-    elemen tetangganya */
-    infotypeanak info;
-    address_anak next;
-    address_anak prev;
+struct ElmNode {
+    infoGraph info;
+    int visited;
+    adrEdge firstEdge;
+    adrNode Next;
 };
 
-struct listanak {
-    /* struct ini digunakan untuk menyimpan list anak itu sendiri */
-    address_anak first;
-    address_anak last;
+struct ElmEdge {
+    adrNode Node;
+    adrEdge Next;
 };
 
-struct elemen_list_induk{
-    /* struct ini untuk menyimpan elemen induk dan pointer penunjuk
-    elemen tetangganya */
-    infotypeanak info;
-    listanak lanak;
-    address next;
-    address prev;
-};
-struct listinduk {
-    /* struct ini digunakan untuk menyimpan list induk itu sendiri */
-    address first;
-    address last;
+struct Graph {
+    adrNode first;
 };
 
-/********* pengecekan apakah list kosong ***********/
-bool ListEmpty(listinduk L);
-/*mengembalikan nilai true jika list induk kosong*/
-bool ListEmptyAnak(listanak L);
-/*mengembalikan nilai true jika list anak kosong*/
-
-/********* pembuatan list kosong *********/
-void CreateList(listinduk &L);
-/* I.S. sembarang
-F.S. terbentuk list induk kosong*/
-
-void CreateListAnak(listanak &L);
-/* I.S. sembarang
-F.S. terbentuk list anak kosong*/
-
-
-/********* manajemen memori *********/
-address alokasi(infotypeinduk P);
-/* mengirimkan address dari alokasi sebuah elemen induk
-jika alokasi berhasil, maka nilai address tidak Nil dan jika gagal
-nilai address Nil */
-
-address_anak alokasiAnak(infotypeanak P);
-/* mengirimkan address dari alokasi sebuah elemen anak
-jika alokasi berhasil, maka nilai address tidak Nil dan jika gagal
-nilai address_anak Nil */
-
-void dealokasi(address P);
-/* I.S. P terdefinisi
-F.S. memori yang digunakan P dikembalikan ke sistem */
-
-void dealokasiAnak(address_anak P);
-/* I.S. P terdefinisi
-F.S. memori yang digunakan P dikembalikan ke sistem */
-/********* pencarian sebuah elemen list *********/
-
-address findElm(listinduk L, infotypeinduk X);
-/* mencari apakah ada elemen list dengan P→info = X
-jika ada, mengembalikan address elemen tab tsb, dan Nil jika sebaliknya
-*/
-
-address_anak findElm(listanak Lanak, infotypeanak X);
-/* mencari apakah ada elemen list dengan P→info = X
-jika ada, mengembalikan address elemen tab tsb, dan Nil jika sebaliknya
-*/
-
-bool fFindElm(listinduk L, address P);
-/* mencari apakah ada elemen list dengan alamat P
-mengembalikan true jika ada dan false jika tidak ada */
-
-bool fFindElmanak(listanak Lanak, address_anak P);
-/* mencari apakah ada elemen list dengan alamat P
-mengembalikan true jika ada dan false jika tidak ada */
-
-address findBefore(listinduk L, address P);
-/* mengembalikan address elemen sebelum P
-jika P berada pada awal list, maka mengembalikan nilai Nil */
-
-address_anak findBeforeAnak(listanak Lanak, infotypeinduk X, address_anak
-P);
-/* mengembalikan address elemen sebelum P dimana P→info = X
-jika P berada pada awal list, maka mengembalikan nilai Nil */
-
-/********* penambahan elemen **********/
-void insertFirst(listinduk &L, address P);
-/* I.S. sembarang, P sudah dialokasikan
-F.S. menempatkan elemen beralamat P pada awal list */
-
-void insertAfter(listinduk &L, address P, address Prec);
-/* I.S. sembarang, P dan Prec alamt salah satu elemen list
-F.S. menempatkan elemen beralamat P sesudah elemen beralamat Prec */
-void insertLast(listinduk &L, address P);
-/* I.S. sembarang, P sudah dialokasikan
-F.S. menempatkan elemen beralamat P pada akhir list */
-
-void insertFirstAnak(listanak &L, address_anak P);
-/* I.S. sembarang, P sudah dialokasikan
-F.S. menempatkan elemen beralamat P pada awal list */
-
-void insertAfterAnak(listanak &L, address_anak P, address_anak Prec);
-/* I.S. sembarang, P dan Prec alamt salah satu elemen list
-F.S. menempatkan elemen beralamat P sesudah elemen beralamat Prec */
-
-void insertLastAnak(listanak &L, address_anak P);
-/* I.S. sembarang, P sudah dialokasikan
-F.S. menempatkan elemen beralamat P pada akhir list */
-
-/********* penghapusan sebuah elemen *********/
-void delFirst(listinduk &L, address &P);
-/* I.S. list tidak kosong
-F.S. adalah alamat dari alamat elemen pertama list
-sebelum elemen pertama list dihapus
-elemen pertama list hilang dan list mungkin menjadi kosong
-first elemen yang baru adalah successor first elemen yang lama */
-
-void delLast(listinduk &L, address &P);
-/* I.S. list tidak kosong
-F.S. adalah alamat dari alamat elemen terakhir list
-sebelum elemen terakhir list dihapus
-elemen terakhir list hilang dan list mungkin menjadi kosong
-last elemen yang baru adalah successor last elemen yang lama */
-
-void delAfter(listinduk &L, address &P, address Prec);
-/* I.S. list tidak kosng, Prec alamat salah satu elemen list
-F.S. P adalah alamatdari Prec→next, menghapus Prec→next dari list */
-
-void delP (listinduk &L, infotypeinduk X);
-/* I.S. sembarang
-F.S. jika ada elemen list dengan alamat P, dimana P→info = X,
-        maka P dihapus dan P di-dealokasi,
-        jika tidak ada maka list tetap list mungkin akan menjadi kosong
-        karena penghapusan */
-
-void delFirstAnak(listanak &L, address_anak &P);
-/* I.S. list tidak kosong
-F.S. adalah alamat dari alamat elemen pertama list
-sebelum elemen pertama list dihapus
-elemen pertama list hilang dan list mungkin menjadi kosong
-first elemen yang baru adalah successor first elemen yang lama */
-
-void delLastAnak(listanak &L, address_anak &P);
-/* I.S. list tidak kosong
-F.S. adalah alamat dari alamat elemen terakhir list
-sebelum elemen terakhir list dihapus
-elemen terakhir list hilang dan list mungkin menjadi kosong
-last elemen yang baru adalah successor last elemen yang lama */
-
-void delAfterAnak(listanak &L, address_anak &P, address_anak Prec);
-/* I.S. list tidak kosng, Prec alamat salah satu elemen list
-F.S. P adalah alamatdari Prec→next, menghapus Prec→next dari list */
-
-void delPAnak (listanak &L, infotypeanak X);
-/* I.S. sembarang
-F.S. jika ada elemen list dengan alamat P, dimana P→info = X,
-        maka P dihapus dan P di-dealokasi,
-        jika tidak ada maka list tetap list mungkin akan menjadi kosong
-        karena penghapusan */
-
-/********** proses semau elemen list *********/
-void printInfo(listinduk L);
-/* I.S. list mungkin kosong
-F.S. jika list tidak kosong menampilkan semua info yang ada pada list
-*/
-
-
-int nbList(listinduk L);
-/* mengembalikan jumlah elemen pada list */
-
-void printInfoAnak(listanak Lanak);
-/* I.S. list mungkin kosong
-F.S. jika list tidak kosong menampilkan semua info yang ada pada list
-*/
-
-int nbListAnak(listanak Lanak);
-/* mengembalikan jumlah elemen pada list anak */
-
-/********** proses terhadap list **********/
-void delAll(listinduk &L);
-/* menghapus semua elemen list dan semua elemen di-dealokasi */
-
+void CreateGraph(Graph &G);
+void InsertNode(Graph &G, infoGraph X);
+void ConnectNode(adrNode &N1, adrNode &N2);
+void PrintInfoGraph(Graph G);
+adrNode FindNode(Graph G, infoGraph X);
 #endif
 ```
 
 <br>
 
-`multilist.cpp`
+`graph.cpp`
 
 ```c++
+#include "graph.h"
 #include <iostream>
-#include "multilist.h"
 using namespace std;
 
-bool ListEmpty(listinduk L) {
-    return (L.first == Nil && L.last == Nil);
+void CreateGraph(Graph &G) {
+    G.first = Nil;
 }
 
-bool ListEmptyAnak(listanak L) {
-    return (L.first == Nil && L.last == Nil);
+void InsertNode(Graph &G, infoGraph X) {
+    adrNode P = new ElmNode;
+    P->info = X;
+    P->visited = 0;
+    P->firstEdge = Nil;
+    P->Next = G.first;
+    G.first = P;
 }
 
-void CreateList(listinduk &L) {
-    L.first = Nil;
-    L.last = Nil;
-}
+void ConnectNode(adrNode &N1, adrNode &N2) {
+    if (N1 != Nil && N2 != Nil) {
+        adrEdge E1 = new ElmEdge;
+        E1->Node = N2;
+        E1->Next = N1->firstEdge;
+        N1->firstEdge = E1;
 
-void CreateListAnak(listanak &L) {
-    L.first = Nil;
-    L.last = Nil;
-}
-
-address alokasi(infotypeinduk P) {
-    address newNode = new elemen_list_induk;
-    newNode->info = P;
-    newNode->next = Nil;
-    newNode->prev = Nil;
-    CreateListAnak(newNode->lanak);
-    return newNode;
-}
-
-address_anak alokasiAnak(infotypeanak P) {
-    address_anak newNode = new elemen_list_anak;
-    newNode->info = P;
-    newNode->next = Nil;
-    newNode->prev = Nil;
-    return newNode;
-}
-
-void dealokasi(address P) {
-    delete P;
-}
-
-void dealokasiAnak(address_anak P) {
-    delete P;
-}
-
-address findElm(listinduk L, infotypeinduk X) {
-    address P = L.first;
-    while (P != Nil && P->info != X) {
-        P = P->next;
-    }
-    return P;
-}
-
-address_anak findElm(listanak Lanak, infotypeanak X) {
-    address_anak P = Lanak.first;
-    while (P != Nil && P->info != X) {
-        P = P->next;
-    }
-    return P;
-}
-
-bool fFindElm(listinduk L, address P) {
-    address curr = L.first;
-    while (curr != Nil) {
-        if (curr == P) {
-            return true;
-        } else {
-            curr = curr->next;
-        }
-    }
-    return false;
-}
-
-bool fFindElmanak(listanak Lanak, address_anak P) {
-    address_anak curr = Lanak.first;
-    while (curr != Nil) {
-        if (curr == P) {
-            return true;
-        } else {
-            curr = curr->next;
-        }
-    }
-    return false;
-}
-
-address findBefore(listinduk L, address P) {
-    address curr = L.first;
-    address before = Nil;
-    while (curr != Nil && curr != P) {
-        before = curr;
-        curr = curr->next;
-    }
-    return before;
-}
-
-address_anak findBeforeAnak(listanak Lanak, infotypeinduk X, address_anak P) {
-    address_anak curr = Lanak.first;
-    address_anak before = Nil;
-    while (curr != Nil && curr != P) {
-        before = curr;
-        curr = curr->next;
-    }
-    return before;
-}
-
-void insertFirst(listinduk &L, address P) {
-    if (ListEmpty(L)) {
-        L.first = P;
-        L.last = P;
-    } else {
-        P->next = L.first;
-        L.first->prev = P;
-        L.first = P;
+        adrEdge E2 = new ElmEdge;
+        E2->Node = N1;
+        E2->Next = N2->firstEdge;
+        N2->firstEdge = E2;
     }
 }
 
-void insertAfter(listinduk &L, address P, address Prec) {
-    if (Prec != Nil) {
-        P->next = Prec->next;
-        P->prev = Prec;
-        if (Prec->next != Nil) {
-            Prec->next->prev = P;
-        } else {
-            L.last = P;
-        }
-    }
-}
+void PrintInfoGraph(Graph G) {
+    adrNode P = G.first;
 
-void insertLast(listinduk &L, address P) {
-    if (ListEmpty(L)) {
-        L.first = P;
-        L.last = P;
-    } else {
-        P->prev = L.last;
-        L.last->next = P;
-        L.last = P;
+    if (P == Nil) {
+        cout << "Graph kosong." << endl;
+        return;
     }
-}
 
-void insertFirstAnak(listanak &L, address_anak P) {
-    if (ListEmptyAnak(L)) {
-        L.first = P;
-        L.last = P;
-    } else {
-        P->next = L.first;
-        L.first->prev = P;
-        L.first = P;
-    }
-}
-
-void insertAfterAnak(listanak &L, address_anak P, address_anak Prec) {
-    if (Prec != Nil) {
-        P->next = Prec->next;
-        P->prev = Prec;
-        if (Prec->next != Nil) {
-            Prec->next->prev = P;
-        } else {
-            L.last = P;
-        }
-    }
-}
-
-void insertLastAnak(listanak &L, address_anak P) {
-    if (ListEmptyAnak(L)) {
-        L.first = P;
-        L.last = P;
-    } else {
-        P->prev = L.last;
-        L.last->next = P;
-        L.last = P;
-    }
-}
-
-void delFirst(listinduk &L, address &P) {
-    if (!ListEmpty(L)) {
-        P = L.first;
-        if (L.first == L.last) {
-            L.first = Nil;
-            L.last = Nil;
-        } else {
-            L.first = L.first->next;
-            L.first->prev = Nil;
-            P->next = Nil;
-        }
-    }
-}
-
-void delLast(listinduk &L, address &P) {
-    if (!ListEmpty(L)) {
-        P = L.last;
-        if (L.first == L.last) {
-            L.first = Nil;
-            L.last = Nil;
-        } else {
-            L.last = L.last->prev;
-            L.last->next = Nil;
-            P->prev = Nil;
-        }
-    }
-}
-
-void delAfter(listinduk &L, address &P, address Prec) {
-    if (Prec != Nil && Prec->next != Nil) {
-        P = Prec->next;
-        Prec->next = P->next;
-        if (P->next != Nil) {
-            P->next->prev = Prec;
-        } else {
-            L.last = Prec;
-        }
-    }
-}
-
-void delP (listinduk &L, infotypeinduk X) {
-    address P = findElm(L, X);
-    if (P != Nil) {
-        if (P == L.first) {
-            delFirst(L, P);
-        } else if (P == L.last) {
-            delLast(L, P);
-        } else {
-            address before = findBefore(L, P);
-            delAfter(L, P, before);
-        }
-    }
-}
-
-void delFirstAnak(listanak &L, address_anak &P) {
-    if (!ListEmptyAnak(L)) {
-        P = L.first;
-        if (L.first == L.last) {
-            L.first = Nil;
-            L.last = Nil;
-        } else {
-            L.first = L.first->next;
-            L.first->prev = Nil;
-            P->next = Nil;
-        }
-    }
-}
-
-void delLastAnak(listanak &L, address_anak &P) {
-    if (!ListEmptyAnak(L)) {
-        P = L.last;
-        if (L.first == L.last) {
-            L.first = Nil;
-            L.last = Nil;
-        } else {
-            L.last = L.last->prev;
-            L.last->next = Nil;
-            P->prev = Nil;
-        }
-    }
-}
-
-void delAfterAnak(listanak &L, address_anak &P, address_anak Prec) {
-    if (Prec != Nil && Prec->next != Nil) {
-        P = Prec->next;
-        Prec->next = P->next;
-        if (P->next != Nil) {
-            P->next->prev = Prec;
-        } else {
-            L.last = Prec;
-        }
-    }
-}
-
-void delPAnak (listanak &L, infotypeanak X) {
-    address_anak P = findElm(L, X);
-    if (P != Nil) {
-        if (P == L.first) {
-            delFirstAnak(L, P);
-        } else if (P == L.last) {
-            delLastAnak(L, P);
-        } else {
-            address_anak before = findBeforeAnak(L, X, P);
-            delAfterAnak(L, P, before);
-        }
-    }
-}
-
-void printInfo(listinduk L) {
-    address P = L.first;
     while (P != Nil) {
-        cout << P->info << " ";
-        P = P->next;
+        cout << P->info << "->";
+        adrEdge E = P->firstEdge;
+        if (E == Nil) {
+            cout << "(tidak ada koneksi)";
+        } else {
+            while (E != Nil) {
+                cout << E->Node->info; // Cetak info node tujuan
+                if (E->Next != Nil) cout << ", ";
+                E = E->Next;
+            }
+        }
+        cout << endl;
+        P = P->Next;
     }
 }
 
-int nbList(listinduk L) {
-    int count = 0;
-    address P = L.first;
+adrNode FindNode(Graph G, infoGraph X) {
+    adrNode P = G.first;
     while (P != Nil) {
-        count++;
-        P = P->next;
+        if (P->info == X) {
+            return P;
+        }
+        P = P->Next;
     }
-    return count;
-}
-
-void printInfoAnak(listanak Lanak) {
-    address_anak P = Lanak.first;
-    while (P != Nil) {
-        cout << P->info << " ";
-        P = P->next;
-    }
-}
-
-int nbListAnak(listanak Lanak) {
-    int count = 0;
-    address_anak P = Lanak.first;
-    while (P != Nil) {
-        count++;
-        P = P->next;
-    }
-    return count;
-}
-
-void delAll(listinduk &L) {
-    address P;
-    while (!ListEmpty(L)) {
-        delFirst(L, P);
-        dealokasi(P);
-    }
+    return Nil;
 }
 ```
 
@@ -946,360 +756,131 @@ void delAll(listinduk &L) {
 using namespace std;
 
 int main() {
-    listinduk L;
-    CreateList(L);
+#include "graph.h"
+#include "graph.cpp"
+#include <iostream>
+using namespace std;
 
-    address Parent1 = alokasi(10);
-    address Parent2 = alokasi(20);
-    address Parent3 = alokasi(30);
+int main() {
+    Graph G;
+    CreateGraph(G);
 
-    insertLast(L, Parent1);
-    insertLast(L, Parent2);
-    insertLast(L, Parent3);
+    // Tambah node
+    InsertNode(G, 'A');
+    InsertNode(G, 'B');
+    InsertNode(G, 'C');
+    InsertNode(G, 'D');
+    InsertNode(G, 'E');
+    InsertNode(G, 'F');
+    InsertNode(G, 'G');
+    InsertNode(G, 'H');
 
-    address_anak Child1 = alokasiAnak(100);
-    address_anak Child2 = alokasiAnak(200);
-    address_anak Child3 = alokasiAnak(300);
+    cout << "\n=== Struktur Graph (sebelum koneksi)===\n";
+    PrintInfoGraph(G);
 
-    insertLastAnak(Parent1->lanak, Child1);
-    insertLastAnak(Parent1->lanak, Child2);
-    insertLastAnak(Parent2->lanak, Child3);
+    // Hubungkan node (graph tidak berarah)
+    adrNode NodeA = FindNode(G, 'A');
+    adrNode NodeB = FindNode(G, 'B');
+    adrNode NodeC = FindNode(G, 'C');
+    adrNode NodeD = FindNode(G, 'D');
+    adrNode NodeE = FindNode(G, 'E');
+    adrNode NodeF = FindNode(G, 'F');
+    adrNode NodeG = FindNode(G, 'G');
+    adrNode NodeH = FindNode(G, 'H');
 
-    cout << "Isi list induk: ";
-    printInfo(L);
-    cout << "\nIsi list induk 1: ";
-    printInfoAnak(Parent1->lanak);
-    cout << "\nIsi list induk 2: ";
-    printInfoAnak(Parent2->lanak);
-    cout << "\nJumlah elemen dalam list induk: " << nbList(L) << endl;
+    ConnectNode(NodeA, NodeB);
+    ConnectNode(NodeA, NodeC);
+    ConnectNode(NodeB, NodeD);
+    ConnectNode(NodeB, NodeE);
+    ConnectNode(NodeC, NodeF);
+    ConnectNode(NodeC, NodeG);
+    ConnectNode(NodeD, NodeH);
+    ConnectNode(NodeG, NodeH);
+    ConnectNode(NodeE, NodeH);
+    ConnectNode(NodeF, NodeH);
 
-    delAll(L);
-    cout << "Setelah menghapus semua elemen, apakah list induk kosong? " << (ListEmpty(L) ? "Ya" : "Tidak") << endl;
+    cout << "\n=== Struktur Graph (setelah koneksi)===\n";
+    PrintInfoGraph(G);
 
+    cout << endl;
     return 0;
 }
 ```
 
-> output<br>![Screenshot output unguided 3](output/unguided_2.png)
+> output<br>![Screenshot output unguided 1](output/unguided_1.png)
 
-Program implementasi _Multi Linked List_ pada C++. Terdapat 3 buah file yang terdiri dari 1 file header (`multilist.h`), 1 file ADT (`multilist.cpp`), dan 1 file utama (`main.cpp`).
+Program implementasi _Graph_ pada C++. Terdapat 3 buah file yang terdiri dari 1 file header (`graph.h`), 1 file ADT (`graph.cpp`), dan 1 file utama (`main.cpp`).
 
-1. multilist.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
+1. graph.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
 
-   - infotypeanak: definisi type **integer**.
+   - infoGraph: Tipe data char untuk menyimpan informasi pada node graph.
+   - adrNode: Pointer ke elemen node graph.
+   - adrEdge: Pointer ke elemen edge graph.
+   - ElmNode: Struct berisi node graph, berisi info, visited.
+   - ElmEdge: Struct berisi edge graph, berisi pointer ke node tujuan.
+   - Graph: Struct berisi pointer ke node pertama graph.
 
-   - infotypeinduk: definisi type **integer**.
+2. graph.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
 
-   - address: definisi type pointer ke struct elemen_list_induk.
+   - `CreateGraph()`: Prosedur untuk membuat graph kosong.
 
-   - address_anak: definisi type pointer ke struct elemen_list_anak.
+   - `InsertNode()`: Prosedur untuk menambahkan node baru dengan info X ke dalam graph.
 
-   - struct elemen_list_anak: menyimpen elemen anak dan pointer penunjuk ke tetangganya.
+   - `ConnectNode()`: Prosedur untuk menghubungkan dua node N1 dan N2 dengan edge tidak berarah.
 
-   - struct listanak: menyimpan list anak itu sendiri.
+   - `PrintInfoGraph()`: Prosedur untuk menampilkan semua info (data) yang ada pada graph beserta koneksinya.
 
-   - struct elemen_list_induk: menyimpen elemen induk dan pointer penunjuk ke tetangganya serta list anak.
+   - `FindNode()`: Function untuk mencari node dengan info X pada graph. Jika ditemukan, return address node tersebut. Jika tidak, return Nil. Disini menambahkan fungsi FindNode() agar memudahkan dalam mencari node saat menghubungkan node.
 
-   - struct listinduk: menyimpan list induk itu sendiri.
-
-2. multilist.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
-
-   - `ListEmpty()`: Function untuk mengecek apakah list induk kosong. Return true jika list kosong, Return false jika tidak kosong.
-
-   - `ListEmptyAnak()`: Function untuk mengecek apakah list anak kosong. Return true jika list kosong, Return false jika tidak kosong.
-
-   - `CreateList()`: Prosedur untuk membuat list induk kosong.
-
-   - `CreateListAnak()`: Prosedur untuk membuat list anak kosong.
-
-   - `alokasi()`: Function untuk mengalokasikan memory untuk node baru dengan value P. Return address dari node baru tersebut.
-
-   - `alokasiAnak()`: Function untuk mengalokasikan memory untuk node anak baru dengan value P. Return address dari node anak baru tersebut.
-
-   - `dealokasi()`: Prosedur untuk mengembalikan memori yang digunakan P ke sistem.
-
-   - `dealokasiAnak()`: Prosedur untuk mengembalikan memori yang digunakan P ke sistem.
-
-   - `findElm()`: Function untuk mencari elemen list induk dengan value X. Jika ditemukan, return address elemen tersebut. Jika tidak, return Nil.
-
-   - `fFindElm()`: Function untuk mencari elemen list induk dengan address P. Return true jika ketemu, return false jika tidak ketemu.
-
-   - `fFindElmanak()`: Function untuk mencari elemen list anak dengan address P. Return true jika ketemu, return false jika tidak ketemu.
-
-   - `findBefore()`: Function untuk mengembalikan address elemen sebelum P pada list induk. Jika P berada pada awal list, return Nil.
-
-   - `findBeforeAnak()`: Function untuk mengembalikan address elemen sebelum P pada list anak. Jika P berada pada awal list, return Nil.
-
-   - `insertFirst()`: Prosedur untuk menempatkan elemen dengan address P pada awal list induk.
-
-   - `insertAfter()`: Prosedur untuk menempatkan elemen dengan address P sesudah elemen dengan address Prec pada list induk.
-
-   - `insertLast()`: Prosedur untuk menempatkan elemen dengan address P pada akhir list induk.
-
-   - `insertFirstAnak()`: Prosedur untuk menempatkan elemen dengan address P pada awal list anak.
-
-   - `insertAfterAnak()`: Prosedur untuk menempatkan elemen dengan address P sesudah elemen dengan address Prec pada list anak.
-
-   - `insertLastAnak()`: Prosedur untuk menempatkan elemen dengan address P pada akhir list anak.
-
-   - `delFirst()`: Prosedur untuk menghapus elemen pertama list induk dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first dan last di-set ke Nil.
-
-   - `delLast()`: Prosedur untuk menghapus elemen terakhir list induk dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first dan last di-set ke Nil.
-
-   - `delAfter()`: Prosedur untuk menghapus elemen sesudah Prec pada list induk dan mengembalikan address elemen tersebut ke P.
-
-   - `delP()`: Prosedur untuk menghapus elemen dengan value X pada list induk. Jika ditemukan, elemen tersebut dihapus dan dilakukan dealokasi.
-
-   - `delFirstAnak()`: Prosedur untuk menghapus elemen pertama list anak dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first dan last di-set ke Nil.
-
-   - `delLastAnak()`: Prosedur untuk menghapus elemen terakhir list anak dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first dan last di-set ke Nil.
-
-   - `delAfterAnak()`: Prosedur untuk menghapus elemen sesudah Prec pada list anak dan mengembalikan address elemen tersebut ke P.
-
-   - `delPAnak()`: Prosedur untuk menghapus elemen dengan value X pada list anak. Jika ditemukan, elemen tersebut dihapus dan dilakukan dealokasi.
-
-   - `printInfo()`: Prosedur untuk menampilkan semua info (data) yang ada pada list induk.
-
-   - `nbList()`: Function untuk menghitung jumlah elemen pada list induk. Return jumlah elemen.
-
-   - `printInfoAnak()`: Prosedur untuk menampilkan semua info (data) yang ada pada list anak.
-
-   - `nbListAnak()`: Function untuk menghitung jumlah elemen pada list anak. Return jumlah elemen.
-
-   - `delAll()`: Prosedur untuk menghapus semua elemen pada list induk dan melakukan dealokasi pada setiap elemen.
-
-3. `main.cpp`: File utama untuk memanggil function dari `multilist.cpp` untuk menjalankan dan menggunakan multilist.
+3. `main.cpp`: File utama untuk memanggil function dari `graph.cpp` untuk menjalankan dan menggunakan graph.
 
 ---
 
-### Unguided 3
+### Unguided 2 - DFS
 
-Buatlah ADT _Multi Linked list_ sebagai berikut di dalam file “**circularlist.h**”:
+Buatlah prosedur untuk menampilkanhasil penelusuran DFS.
 
-```
-Type infotype : mahasiswa <
-    Nama:string
-    Nim:string
-    Jenis_kelamin:char
-    Ipk:float>
-Type address : pointer to ElmList
-Type ElmList <
-    info : infotype
-    next :address>
-Type List <
-    First : address>
-```
-
-- Terdapat 11 fungsi/prosedur untuk ADT circularlist
-  - procedure CreateList( input/output L : List )
-  - function alokasi( x : infotype ) → address
-  - procedure dealokasi( input/output t P : address )
-  - procedure insertFirst( input/output L : List, input P : address )
-  - procedure insertAfter( input/output L : List, input Prec : address, P : address)
-  - procedure insertLast( input/output L : List, input P : address )
-  - procedure deleteFirst( input/output L : List, input/output P : address )
-  - procedure deleteAfter( input/output L : List, input Prec : address,  
-     input/output t P : address )
-  - procedure deleteLast( input/output L : List, P : address )
-  - function findElm( L : List, x : infotype ) → address
-  - procedure printInfo( input L : List )
-
-Buatlah implementasi ADT _Doubly Linked list_ pada _file_ “**circularlist.cpp**”. Tambahkan fungsi/prosedur berikut pada file “**main.cpp**”.
-
-- fungsi create ( in nama, nim : string, jenis_kelamin : char, ipk : float)
-  - fungsi disediakan, ketik ulang code yang diberikan
-  - fungsi mengalokasikan sebuah elemen list dengan info sesuai input
-
-`circularlist.h`
+`graph.h`
 
 ```c++
-#ifndef CIRCULARLIST_H_INCLUDED
-#define CIRCULARLIST_H_INCLUDED
-#define Nil NULL
-#include <string>
-using namespace std;
+...
+adrNode FindNode(Graph G, infoGraph X);
 
-typedef struct ElmList *address;
-
-struct infotype {
-    string Nama;
-    string Nim;
-    char Jenis_kelamin;
-    float IPK;
-};
-
-struct ElmList {
-    infotype info;
-    address next;
-};
-
-struct List {
-    address First;
-};
-
-void CreateList(List &L);
-address alokasi(infotype x);
-void dealokasi(address P);
-void insertFirst(List &L, address P);
-void insertAfter(List &L, address P, address Prec);
-void insertLast(List &L, address P);
-void deleteFirst(List &L, address &P);
-void deleteAfter(List &L, address Prec, address &P);
-void deleteLast(List &L, address &P);
-address findElm(List L, infotype x);
-void printInfo(List L);
-address CreateData(string nama, string nim, char jenis_kelamin, float ipk);
-
-
+// Menambahkan fungsi Traversal
+void ResetVisited(Graph &G);
+void PrintDFS(Graph &G, adrNode N);
 #endif
 ```
 
 <br>
 
-`circularlist.cpp`
+`graph.cpp`
 
 ```c++
-#include <iostream>
-#include "circularlist.h"
-using namespace std;
+...
 
-void CreateList(List &L) {
-    L.First = Nil;
+void ResetVisited(Graph &G) {
+    adrNode P = G.first;
+    while (P != Nil) {
+        P->visited = 0;
+        P = P->Next;
+    }
 }
 
-address alokasi(infotype x) {
-    address P = new ElmList;
-    P->info = x;
-    P->next = Nil;
-    return P;
-}
+void PrintDFS(Graph &G, adrNode N) {
+    if (N == Nil) {
+        return;
+    }
+    N->visited = 1;
+    cout << N->info << " ";
 
-void dealokasi (address P) {
-    delete P;
-}
-
-void insertFirst(List &L, address P) {
-    if (L.First == Nil) {
-        L.First = P;
-        P->next = L.First;
-    } else {
-        address last = L.First;
-        while (last->next != L.First) {
-            last = last->next;
+    adrEdge E = N->firstEdge;
+    while (E != Nil) {
+        if (E->Node->visited == 0) {
+            PrintDFS(G, E->Node);
         }
-        P->next = L.First;
-        L.First = P;
-        last->next = L.First;
+        E = E->Next;
     }
-}
-
-void insertAfter(List &L, address Prec, address P) {
-    if (Prec != Nil) {
-        P->next = Prec->next;
-        Prec->next = P;
-    }
-}
-
-void insertLast(List &L, address P) {
-    if (L.First == Nil) {
-        L.First = P;
-        P->next = L.First;
-    } else {
-        address last = L.First;
-        while (last->next != L.First) {
-            last = last->next;
-        }
-        last->next = P;
-        P->next = L.First;
-    }
-}
-
-void deleteFirst(List &L, address &P) {
-    if (L.First != Nil) {
-        P = L.First;
-        if (L.First->next == L.First) {
-            L.First = Nil;
-        } else {
-            address last = L.First;
-            while (last->next != L.First) {
-                last = last->next;
-            }
-            L.First = L.First->next;
-            last->next = L.First;
-        }
-    }
-}
-
-void deleteAfter(List &L, address Prec, address &P) {
-    if (Prec != Nil && Prec->next != L.First) {
-        P = Prec->next;
-        Prec->next = P->next;
-    }
-}
-
-void deleteLast(List &L, address &P) {
-    if (L.First != Nil) {
-        address last = L.First;
-        address beforeLast = Nil;
-        while (last->next != L.First) {
-            beforeLast = last;
-            last = last->next;
-        }
-        P = last;
-        if (beforeLast == Nil) {
-            L.First = Nil;
-        } else {
-            beforeLast->next = L.First;
-        }
-    }
-}
-
-address findElm(List L, infotype x) {
-    if (L.First == Nil) {
-        return Nil;
-    } else {
-        address P = L.First;
-        do {
-            if (P->info.Nim == x.Nim) {
-                return P;
-            } else {
-                P = P->next;
-            }
-        } while (P != L.First);
-        return Nil;
-    }
-}
-
-void printInfo(List L) {
-    int i = 1;
-    if (L.First == Nil) {
-        cout << "List kosong." << endl;
-    } else {
-        address P = L.First;
-        cout << "No\t| Nama \t| Nim \t| Jenis Kelamin | IPK" << endl;
-        cout << "-----------------------------------------------" << endl;
-        do {
-            cout << i << "\t| " << P->info.Nama << "\t| " << P->info.Nim << "\t| " << P->info.Jenis_kelamin << "\t\t| " << P->info.IPK << endl;
-            P = P->next;
-            i++;
-        } while (P != L.First);
-    }
-}
-
-address CreateData(string nama, string nim, char jenis_kelamin, float ipk)
-{
-    /**
-    * PR : mengalokasikan sebuah elemen list dengan info dengan info sesuai input
-    * FS : address P menunjuk elemen dengan info sesuai input
-    */
-    infotype x;
-    address P;
-    x.Nama = nama;
-    x.Nim = nim;
-    x.Jenis_kelamin = jenis_kelamin;
-    x.IPK = ipk;
-    P = alokasi(x);
-    return P;
 }
 ```
 
@@ -1314,89 +895,102 @@ address CreateData(string nama, string nim, char jenis_kelamin, float ipk)
 using namespace std;
 
 int main() {
-    List L, A, B, L2;
+    ...
 
-    address P1 = Nil;
-    address P2 = Nil;
-    infotype x;
+    cout << "\n=== DFS dari Node A ===\n";
+    ResetVisited(G);
+    PrintDFS(G, FindNode(G, 'A'));
 
-    CreateList(L);
-
-    cout<<"coba insert first, last, dan after"<<endl;
-    P1 = CreateData("Danu", "04", 'l', 4.0);
-    insertFirst(L,P1);
-    P1 = CreateData("Fahmi", "06", 'l',3.45);
-    insertLast(L,P1);
-    P1 = CreateData("Bobi", "02", 'l',3.71);
-    insertFirst(L,P1);
-
-    P1 = CreateData("Ali", "01", 'l', 3.3);
-    insertFirst(L,P1);
-
-    P1 = CreateData("Gita", "07", 'p', 3.75);
-    insertLast(L,P1);
-
-    x.Nim = "07";
-    P1 = findElm(L,x);
-    P2 = CreateData("Cindi", "03", 'p', 3.5);
-    insertAfter(L, P1, P2);
-
-    x.Nim = "02";
-    P1 = findElm(L,x);
-    P2 = CreateData("Hilmi", "08", 'p', 3.3);
-    insertAfter(L, P1, P2);
-
-    x.Nim = "04";
-    P1 = findElm(L,x);
-    P2 = CreateData("Eli", "05", 'p', 3.4);
-    insertAfter(L, P1, P2);
-
-    printInfo(L);
     return 0;
 }
 ```
 
-> output<br>![Screenshot output unguided 1](output/unguided_3.png)
+> output<br>![Screenshot output unguided 2](output/unguided_2.png)
 
-Program implementasi _Circular List_ pada C++. Diimplementasikan menggunakan _Doubly Linked List_ dan memiliki 3 operasi yaitu _insert_, _find_ & _delete_. Terdapat 3 buah file yang terdiri dari 1 file header (`circularlist.h`), 1 file ADT (`circularlist.cpp`), dan 1 file utama (`main.cpp`).
+Perubahan yang dilakukan pada file `graph.h`, `graph.cpp`, dan `main.cpp` untuk menambahkan prosedur penelusuran DFS (Depth First Search) pada graph.
 
-1. circularlist.h: File header ini bekerja sebagai interface, mendeklarasikan semua struct dan function.
+1. graph.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
 
-   - address: definisi type pointer ke struct ElmList.
+   - `ResetVisited()`: Prosedur untuk mereset status visited semua node dalam graph menjadi 0 (belum dikunjungi). Fungsi ini dibutuhkan untuk memastikan bahwa setiap traversal graph dimulai dengan kondisi semua node belum dikunjungi.
 
-   - struct infotype: mendefinisikan tipe data untuk menyimpan informasi mahasiswa yang terdiri dari Nama, Nim, Jenis_kelamin, dan Ipk.
+   - `PrintDFS()`: Prosedur untuk menampilkan hasil penelusuran DFS mulai dari node N. Prosedur ini menggunakan pendekatan rekursif untuk menelusuri graph, menandai node yang sudah dikunjungi, dan mencetak info node tersebut.
 
-   - struct ElmList: menyimpan elemen list dan pointer ke elemen selanjutnya.
+---
 
-   - struct List: menyimpan list itu sendiri dengan pointer ke elemen pertama.
+### Unguided 2 - DFS
 
-2. circularlist.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
+Buatlah prosedur untuk menampilkanhasil penelusuran DFS.
 
-   - `CreateList()`: Prosedur untuk membuat list kosong.
+`graph.h`
 
-   - `alokasi()`: Function untuk mengalokasikan memory untuk node baru dengan value x. Return address dari node baru tersebut.
+```c++
+...
+void PrintBFS(Graph &G, adrNode N);
+#endif
+```
 
-   - `dealokasi()`: Prosedur untuk mengembalikan memori yang digunakan P ke sistem.
+<br>
 
-   - `insertFirst()`: Prosedur untuk menempatkan elemen dengan address P pada awal list.
+`graph.cpp`
 
-   - `insertAfter()`: Prosedur untuk menempatkan elemen dengan address P sesudah elemen dengan address Prec.
+```c++
+...
 
-   - `insertLast()`: Prosedur untuk menempatkan elemen dengan address P pada akhir list. Cek apakah list kosong atau tidak untuk mengatur pointer next dari elemen terakhir.
+void PrintBFS(Graph &G, adrNode N) {
+    if (N == Nil) {
+        return;
+    }
+    queue<adrNode> Q;
+    Q.push(N);
 
-   - `deleteFirst()`: Prosedur untuk menghapus elemen pertama list dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first di-set ke Nil.
+    while (!Q.empty()) {
+        adrNode curr = Q.front();
+        Q.pop();
 
-   - `deleteAfter()`: Prosedur untuk menghapus elemen sesudah Prec dan mengembalikan address elemen tersebut ke P.
+        if (curr->visited == 0) {
+            curr->visited = 1;
+            cout << curr->info << " ";
 
-   - `deleteLast()`: Prosedur untuk menghapus elemen terakhir list dan mengembalikan address elemen tersebut ke P. Kalau list kosong, tidak melakukan apa-apa. Kalau list jadi kosong setelah hapus data, maka first di-set ke Nil.
+            adrEdge E = curr->firstEdge;
+            while (E != Nil) {
+                if (E->Node->visited == 0) {
+                    Q.push(E->Node);
+                }
+                E = E->Next;
+            }
+        }
+    }
+}
+```
 
-   - `findElm()`: Function untuk mencari elemen list dengan value x. Jika ditemukan, return address elemen tersebut. Jika tidak, return Nil.
+<br>
 
-   - `printInfo()`: Prosedur untuk menampilkan semua info (data) yang ada pada list.
+`main.cpp`
 
-   - `CreateData()`: Function untuk mengalokasikan sebuah elemen list dengan info sesuai input. Return address dari elemen tersebut.
+```c++
+#include <iostream>
+#include "circularlist.h"
+#include "circularlist.cpp"
+using namespace std;
 
-3. `main.cpp`: File utama untuk memanggil function dari `circularlist.cpp` untuk menjalankan operasi Circular List.
+int main() {
+    ...
+
+    cout << "\n\n=== BFS dari Node A ===\n";
+    ResetVisited(G);
+    PrintBFS(G, FindNode(G, 'A'));
+
+    return 0;
+}
+```
+
+> output<br>![Screenshot output unguided 2](output/unguided_2.png)
+
+Perubahan yang dilakukan pada file `graph.h`, `graph.cpp`, dan `main.cpp` untuk menambahkan prosedur penelusuran BFS (Breadth First Search) pada graph.
+
+1. graph.cpp: File implementasi ini berisi logic dari semua function yang dideklarasikan di dalam file header.
+
+   - `PrintBFS()`: Prosedur untuk menampilkan hasil penelusuran BFS mulai dari node N. Prosedur ini menggunakan struktur data queue untuk menyimpan node yang akan dieksplorasi selanjutnya, memastikan bahwa node yang lebih dekat ke root dieksplorasi terlebih dahulu.
 
 ## Referensi
 
@@ -1412,3 +1006,4 @@ Program implementasi _Circular List_ pada C++. Diimplementasikan menggunakan _Do
 10. _GeeksForGeeks_. https://www.geeksforgeeks.org/cpp/b-tree-implementation-in-cpp/. Diakses pada 6 Desember 2025.
 11. _GeeksForGeeks_. https://www.geeksforgeeks.org/dsa/circular-linked-list/. Diakses pada 18 Desember 2025.
 12. _GeekForGeeks_. https://www.geeksforgeeks.org/dsa/introduction-to-multi-linked-list/. Diakses 18 Desember 2025.
+13. _Medium_. https://medium.com/@itsvinayyay/graphs-data-structure-in-c-ab7b4205f41a. Diakses Pada 20 Desember 2025.
